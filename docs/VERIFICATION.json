@@ -1,42 +1,60 @@
 {
   "date": "2026-10-07",
   "fullLocalTests": {
-    "backend": 143,
-    "frontend": 105,
-    "build": "passed, large-bundle warning"
+    "backend": 162,
+    "frontend": 125,
+    "build": "passed, existing large-bundle warning"
   },
   "publicChecks": {
-    "backend": 40,
-    "frontend": 105,
-    "build": "passed"
+    "backend": 65,
+    "frontend": 125,
+    "launcher": 1,
+    "build": "passed, existing large-bundle warning"
   },
-  "liveFullCoreFlow": "passed against private attributed snapshot",
   "publicApiDemo": {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
     "passed": true,
-    "requests": 2,
-    "reportedCostUsd": 0.00120025,
-    "persistenceAfterReopen": true
+    "requests": 4,
+    "estimatedCostUsd": 0.0044108,
+    "persistenceAfterReopen": true,
+    "scope": [
+      "simulated quote proposal and accepted record at KWD 0.999",
+      "actual 11-page PDF fill, immutable revision and exact-hash review",
+      "store reopen retaining reviewed PDF and saved quote"
+    ],
+    "sent": false,
+    "submitted": false
   },
   "browser": {
-    "proposal": "real OpenRouter",
-    "reviewSave": "passed",
-    "reloadAndOperationsQuote": "passed",
-    "amountKwd": "0.999",
-    "basis": "simulated"
+    "conversationContinueAfterReload": "same scoped conversation retained",
+    "validation": "real OpenAI draft with structured proposedTest adopted; both decision branches retained",
+    "pdf": "five real field updates; immutable manual v2; both reviewed exports match hashes; native browser download confirmed",
+    "layout": "desktop, 1024px narrow, 390px mobile; fit-page PDF and bottom actions; model menu kept inside composer; Arabic guide spot-check",
+    "guideSteps": 8,
+    "plannedCapabilities": 13,
+    "delivery": "local preview only; no message sent"
+  },
+  "researchQuality": {
+    "exactPassageCitationGuard": "ambiguous publication IDs rejected; exact retrieved chunk required",
+    "semanticClaimValidation": "human review required; existence of a retrieved citation does not guarantee its claim is supported",
+    "historicalData": "dates and limitations retained; captured sources are not current legal-applicability proof"
   },
   "publicationScan": {
-    "files": 240,
-    "issues": 0,
+    "status": "passed",
     "credentialFilesExcluded": true,
     "fullThirdPartySourcesExcluded": true,
-    "privateAssessmentExcluded": true
+    "privateAssessmentExcluded": true,
+    "files": 265,
+    "issues": 0
   },
   "githubCi": "workflow template supplied; not enabled because CLI OAuth lacks workflow scope",
   "limits": [
-    "No full live all-record coverage",
-    "Full bilingual/accessibility audit open",
-    "Public clone needs authorised corpus for research",
+    "No complete live all-record coverage or reliability guarantee",
+    "Full bilingual and accessibility audit remains open",
+    "Public clone needs an authorised matching corpus for source-backed research",
     "No connected email sender or government submission",
-    "Local prototype, no cloud deployment"
+    "Only supported Latin AcroForm fields in one official PDF template",
+    "Local app, no cloud deployment"
   ]
 }

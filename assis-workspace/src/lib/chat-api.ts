@@ -4,7 +4,7 @@ import {API,request} from './preparation-api.ts'
 
 const record=z.record(z.string(),z.unknown())
 export const conversationSchema=z.object({archived:z.boolean().optional(),id:z.string(),caseId:z.string().nullable().optional(),workspaceId:z.string().optional(),title:z.string(),createdAt:z.string(),updatedAt:z.string()})
-export const eventSchema=z.object({id:z.string(),type:z.enum(['tool_started','tool_completed','tool_failed','action_required','error','pdf_field_updated','artifact_saved','email_draft_saved']),name:z.string(),label:z.string(),at:z.string(),result:z.unknown().optional(),error:z.unknown().optional()})
+export const eventSchema=z.object({id:z.string(),type:z.enum(['tool_started','tool_completed','tool_failed','action_required','error','pdf_field_updated','artifact_saved','email_draft_saved','context_limit_diagnostics']),name:z.string(),label:z.string(),at:z.string(),result:z.unknown().optional(),error:z.unknown().optional()})
 export const modelSchema=z.object({name:z.string(),version:z.string().optional()}).passthrough()
 export const turnSchema=z.object({id:z.string(),conversationId:z.string(),status:z.enum(['queued','running','completed','needs_input','failed']),executionMode:z.enum(['live_agent','deterministic']),model:modelSchema.nullable().optional(),events:z.array(eventSchema).default([])}).passthrough()
 export function modelLabel(model:{name:string;version?:string}|null|undefined){return model?[model.name,model.version].filter(Boolean).join(' · '):'AI'}

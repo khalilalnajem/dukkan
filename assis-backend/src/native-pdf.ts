@@ -8,7 +8,7 @@ export const pdfDescription='Fill actual KDIPA Application B PDF AcroForm fields
 export function pdfTemplate(){const manifest=JSON.parse(readFileSync(new URL('form-manifest.json',assets),'utf8'));return {...manifest,fields:[...manifest.fields,...[['Commercial Code',2],['Executive Management',2],['Cash',3],['Inkind Contribution',3],['Total Capital',3],['Capital Expenditure CAPEX',4],['Working Capital',4],['Total Investment Value',4],['Kuwait Branch Manager',4]].map(([fieldName,page])=>({fieldName,label:fieldName,page}))]};}
 export const pdfSchema={type:'object',properties:{templateId:{type:'string',enum:['pearl-delta-official-form']},fields:{type:'object',properties:Object.fromEntries(pdfTemplate().fields.map((f:any)=>[f.fieldName,{type:'string',description:f.label}])),additionalProperties:false},expectedHash:{type:'string'},recreate:{type:'boolean',description:'Explicitly recreate from supplied fields after case facts change; discard earlier values.'}},required:['templateId','fields'],additionalProperties:false};
 const digest=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
-export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:string,assertCurrent:()=>void,onField:(field:string)=>void){
+export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:string,assertCurrent:()=>void,onField:(field:string,value:string,page:number)=>void){
  const template=pdfTemplate();
  ensure(args.templateId===template.id,'UNKNOWN_TEMPLATE','Choose the supported official PDF template');
  ensure(args.fields&&typeof args.fields==='object'&&!Array.isArray(args.fields)&&Object.keys(args.fields).length>0,'INVALID_PDF_FIELDS','Supply at least one field');
@@ -26,7 +26,10 @@ export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:stri
  ensure(digest(bytes)===template.templateSha256,'TEMPLATE_CHANGED','Official template hash changed; review its mapping first',409);
  const pdf=await PDFDocument.load(bytes);const form=pdf.getForm();const font=await pdf.embedFont(StandardFonts.Helvetica);
  const fields={...(!args.recreate?previous?.fields||{}:{}),...args.fields};
- for(const [key,value] of Object.entries(fields)){form.getTextField(key).setText(String(value));form.getTextField(key).setFontSize(9);}
+ for(const [key,value] of Object.entries(fields)){
+  assertCurrent();form.getTextField(key).setText(String(value));form.getTextField(key).setFontSize(9);
+  if(Object.hasOwn(args.fields,key))onField(key,String(value),allowed.get(key).page);
+ }
  form.updateFieldAppearances(font);
  for(const page of pdf.getPages())page.drawText('DEMONSTRATION - FICTIONAL COMPANY - NOT SUBMITTED',{x:28,y:10,size:8,font,color:rgb(.55,.1,.1)});
  const output=await pdf.save();assertCurrent();
@@ -34,6 +37,5 @@ export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:stri
  const id=randomUUID(),hash=digest(output);
  const artifact={id,kind:'official_pdf',format:'pdf',templateId:template.id,title:'KDIPA branch application · demonstration',conversationId:t.conversationId,caseId:t.caseId,turnId:t.id,businessRevision:t.businessRevision,factsHash:t.factsHash,version:(previous?.version||0)+1,supersedesArtifactId:previous?.id||null,createdAt:new Date().toISOString(),hash,pdfBase64:Buffer.from(output).toString('base64'),previewUrl:`/api/chat/artifacts/${id}/draft`,reviewUrl:`/api/chat/artifacts/${id}/review`,exportUrl:`/api/chat/artifacts/${id}/export?hash=${hash}`,fields,fieldDefinitions:template.fields.map((f:any)=>({fieldName:f.fieldName,label:f.label,page:f.page})),sourceURL:template.sourceURL,templateSha256:template.templateSha256,capturedAt:template.capturedAt,citations:[{id:template.id,title:'KDIPA Application B',url:template.sourceURL}],missingFields:template.missing,provenance:'Filled by Dukkan native PDF tool using user-supplied demonstration values. Eligibility unconfirmed.',approved:false,sent:false,review:null};
  store.put('chat_artifact',id,t.caseId,artifact);
- for(const key of Object.keys(args.fields))onField(key);
  return artifact;
 }

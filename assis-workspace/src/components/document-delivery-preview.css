@@ -1,0 +1,21 @@
+.document-delivery-dialog{position:fixed;inset:0;margin:auto;width:min(500px,calc(100vw - 32px));max-height:calc(100dvh - 40px);overflow:auto;border:1px solid #dce3db;border-radius:16px;background:#fff;padding:24px;color:#25372d;font-family:inherit;box-shadow:0 24px 90px #11271b30}
+.document-delivery-dialog::backdrop{background:#142b204a}
+.document-delivery-dialog header{display:flex;align-items:center;gap:16px;justify-content:space-between}
+.document-delivery-dialog h2{margin:0;font-size:18px;font-weight:600;line-height:1.4}
+.document-delivery-dialog header button{display:grid;place-items:center;width:32px;height:32px;flex:none;border:0;border-radius:8px;background:#f2f5ef;color:inherit;cursor:pointer}
+.delivery-preview-note{font-size:13px;line-height:1.6;color:#657369;margin:12px 0 20px}
+.delivery-preview-document{display:flex;align-items:flex-start;gap:12px;padding:14px;background:#f7f9f5;border:1px solid #e4e9df;border-radius:10px;margin-bottom:20px}
+.delivery-preview-document>svg{flex:none;color:#466a52;margin-top:3px}
+.delivery-preview-document strong{display:block;font-size:14px;font-weight:500;line-height:1.5}
+.delivery-preview-document span{display:block;font-size:12px;color:#6c786d;margin-top:4px}
+.document-delivery-dialog label{display:grid;gap:7px;font-size:13px}
+.document-delivery-dialog input{width:100%;height:42px;border:1px solid #d8e0d6;border-radius:8px;padding:8px 12px;font:inherit;color:inherit;background:white}
+.delivery-preview-submit{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:42px;margin-top:20px;border:0;border-radius:8px;color:#fff;background:#284e3a;font:inherit;font-size:13px;cursor:pointer}
+.delivery-preview-submit:disabled{opacity:.45;cursor:default}
+.delivery-preview-result{display:flex;gap:12px;margin-top:20px;padding:15px;border:1px solid #d8e3d4;background:#f5f9f1;border-radius:10px;font-size:13px}
+.delivery-preview-result>svg{flex:none;color:#426948}
+.delivery-preview-result strong{font-weight:600}
+.delivery-preview-result p{line-height:1.6;margin:6px 0 0;color:#647161}
+.delivery-preview-reset{margin-top:16px;padding:0;border:0;background:none;font:inherit;font-size:13px;color:#315641;text-decoration:underline;cursor:pointer}
+.document-delivery-dialog :focus-visible{outline:2px solid #557e63;outline-offset:3px}
+@media(max-width:500px){.document-delivery-dialog{padding:20px}}

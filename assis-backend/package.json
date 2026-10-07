@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node --experimental-strip-types src/server.ts",
-    "test": "node --experimental-strip-types --test test/openrouter.test.ts test/siliconflow.test.ts test/siliconflow-catalogue.test.ts test/fallback-model.test.ts test/business-records.test.ts test/workspace-proposal.test.ts test/workspace-model-context.test.ts test/native-pdf.test.ts test/email.test.ts test/stage-request.test.ts",
+    "test": "node --experimental-strip-types --test test/openrouter.test.ts test/siliconflow.test.ts test/siliconflow-catalogue.test.ts test/fallback-model.test.ts test/business-records.test.ts test/workspace-proposal.test.ts test/workspace-model-context.test.ts test/native-pdf.test.ts test/email.test.ts test/stage-request.test.ts test/chat-context.test.ts test/stage-presentation.test.ts test/openai.test.ts test/chat-model-id.test.ts test/stage-draft.test.ts",
     "start:configured": "node --env-file=.env.local --experimental-strip-types src/server.ts",
     "test:full": "node --experimental-strip-types --test test/*.test.ts tools/__tests__/*.test.ts",
     "verify:release": "node --env-file=.env.local --experimental-transform-types test/api-public-demo.ts"

@@ -15,8 +15,16 @@
 
 ## Evidence and boundaries
 
-The full API run passed research/critique (four citations), validation (two citations and a test proposal), costs (two citations), a valid simulated quote proposal, and actual 11-page PDF filling/revision/review. A separate visible browser test accepted the quote, reloaded and found it under Operations. The first populated-workspace attempt failed the 60,000-byte request cap; the bounded context fix passed on the next real API attempt and has a regression test.
+The earlier full local API run passed source retrieval, critique, validation, costs, a simulated quote and actual PDF filling/revision/review against the private attributed snapshot. The 7 October OpenAI browser run retained the same scoped conversation, saved a sourced validation draft with a structured test, and adopted the test with both decision branches. The founder choice and original test remain in saved context. No interviews or sales occurred.
 
-Full local backend tests: 143 passed. Frontend: 105 passed. Build passed with an existing large-bundle warning. The full research library contains captured evidence, not freshly revalidated law. All-record live API coverage, complete bilingual/accessibility review and production hosting remain separate acceptance work. The earlier 55-second recording used fictional data with AI disabled; it is not evidence of this live run.
+Five PDF field events were emitted by actual AcroForm updates. The browser showed the filled 11-page PDF, created and reviewed a second immutable version, retained the first version's bytes, and downloaded a PDF whose SHA-256 matched the reviewed hash. Fit page keeps the entire page visible above the review/download footer. The delivery dialog demonstrates a local preview and explicitly records that no message was sent.
 
-The public demonstration script tests actual API records/PDFs independently of the non-distributed corpus. Public screenshots depict a local fictional workspace. No mail, payment or government submission is performed.
+The separate public-code OpenAI demonstration passed a simulated quote at KWD 0.999, actual PDF filling, deterministic revision, review and store reopening. It made four model requests, costing an estimated USD 0.0044108 from reported token use. It does not depend on the non-distributed research corpus and reads no user business.
+
+Checks passed: 162 full local backend tests, 65 public backend tests, 125 frontend tests, the launcher HTTP test, TypeScript and the production build. The existing large-bundle warning remains. Layout checks covered desktop, 1024-pixel narrow, 390-pixel mobile, the model selector and an Arabic guide spot-check. The guide contains eight workflow steps; thirteen later capabilities are separate in Next phases.
+
+Model output remains a draft requiring human review. QA found incorrect country, historical-statistic and source-claim choices in earlier generated versions. Prompt instructions and exact-passage citation checks were tightened, and validation drafts now require a structured adoptable test even for ordinary typed requests. These checks do not semantically prove every generated statement. The corrected draft is retained for review; it is not marked as verified market demand.
+
+The research library contains captured evidence, not freshly revalidated law. All-record live API coverage, complete bilingual/accessibility review and production hosting remain open. Only supported Latin AcroForm fields in the registered official template are filled. The earlier 55-second recording used fictional data with AI disabled; it is not evidence of a live run.
+
+Public screenshots depict the actual local application with sample inputs. No mail, payment or government submission is performed.

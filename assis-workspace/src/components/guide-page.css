@@ -1,49 +1,42 @@
-/* Guide page: mirrors the About page rhythm (kicker, large title, hairline sections). */
 .dukkan-guide{--guide-border:#e2e8e1;--guide-ink:#1d2924;--guide-muted:#5f7065;--guide-green:#204638;max-width:1120px;margin:0 auto;padding:clamp(32px,5vw,72px);color:var(--guide-ink);background:#fff}
-.dukkan-guide-intro{max-width:760px;padding:clamp(20px,3vw,40px) 0 48px}
-.dukkan-guide-intro h1{font-size:clamp(36px,4.4vw,58px);line-height:1.13;letter-spacing:-.04em;color:#153b2d;margin:18px 0}
-.dukkan-guide-intro p{font-size:16px;line-height:1.7;color:#647368;max-width:600px;margin:0}
-.dukkan-guide-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:27px}
-.dukkan-guide-actions [data-slot=button]{min-height:45px;padding:0 19px;border-radius:8px;font-weight:650;white-space:normal;height:auto}
+.dukkan-guide-intro{max-width:760px;padding:clamp(20px,3vw,40px) 0 38px}
+.dukkan-guide-intro h1{font-size:clamp(36px,4.4vw,58px);line-height:1.13;letter-spacing:-.04em;color:#153b2d;margin:16px 0}
+.dukkan-guide-intro>p{font-size:16px;line-height:1.7;color:#647368;max-width:610px;margin:0}
+.dukkan-guide-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.dukkan-guide-actions [data-slot=button]{min-height:43px;padding:0 17px;border-radius:8px;font-weight:650;white-space:normal;height:auto}
 .dukkan-guide-intro [data-slot=button]:first-child{background:var(--guide-green);color:#fff}
 .dukkan-guide-intro [data-slot=button]:first-child:hover{background:#315b47}
 .dukkan-guide-actions [data-slot=button][aria-current=true]{box-shadow:inset 0 0 0 2px #7fa58f}
-.dukkan-guide [data-slot=button][data-variant=outline],.dukkan-guide-actions [data-slot=button]:not(:first-child){background:#fff;color:var(--guide-green);border:1px solid var(--guide-border);box-shadow:none}
-.dukkan-guide-actions [data-slot=button]:not(:first-child):hover{background:#f7f9f6}
-.dukkan-guide-note{display:block;margin-top:14px;font-size:12px;color:var(--guide-muted)}
-.dukkan-guide-section{border-top:1px solid var(--guide-border);padding:40px 0 44px}
-.dukkan-guide-heading{max-width:760px;margin-bottom:26px}
-.dukkan-guide-heading h2{font-size:clamp(22px,2.4vw,30px);line-height:1.25;letter-spacing:-.025em;color:#193d2e;margin:10px 0 0}
-.dukkan-guide-steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.dukkan-guide-card{height:100%;display:flex;flex-direction:column;background:#fff;border:1px solid var(--guide-border);border-radius:12px;padding:22px 22px 20px;min-width:0}
-.dukkan-guide-card>svg{color:var(--guide-green);margin-bottom:14px}
-.dukkan-guide-number{font-size:11px;font-weight:750;color:#668272;letter-spacing:.08em}
-.dukkan-guide-card h3{font-size:17px;font-weight:720;line-height:1.3;color:var(--guide-green);margin:10px 0 14px}
-.dukkan-guide-card dl{display:grid;gap:11px;margin:0 0 18px;padding:0}
-.dukkan-guide-card dl div{display:grid;gap:3px}
-.dukkan-guide-card dt{font-size:10px;font-weight:750;letter-spacing:.09em;text-transform:uppercase;color:#789083}
-.dukkan-guide-card dd{margin:0;font-size:12.5px;line-height:1.6;color:#4f6257}
-.dukkan-guide-card>p{font-size:12.5px;line-height:1.65;color:#5f7065;margin:0}
-.dukkan-guide-cta{margin-top:auto;display:inline-flex;align-items:center;gap:6px;align-self:flex-start;color:var(--guide-green);font-weight:700;font-size:12.5px;padding:6px 0;border-bottom:1px solid transparent}
+.dukkan-guide [data-slot=button][data-variant=outline]{background:#fff;color:var(--guide-green);border:1px solid var(--guide-border);box-shadow:none}
+.dukkan-guide [data-slot=button][data-variant=outline]:hover{background:#f7f9f6}
+.dukkan-guide-note{margin-top:12px!important;font-size:12px!important;color:var(--guide-muted)!important}
+.dukkan-guide-section{border-top:1px solid var(--guide-border);padding:34px 0 40px}
+.dukkan-guide-heading{margin-bottom:20px}
+.dukkan-guide-heading h2,.dukkan-guide-trust h2{font-size:clamp(22px,2.4vw,29px);line-height:1.25;letter-spacing:-.025em;color:#193d2e;margin:8px 0 0}
+.dukkan-guide-journey{position:relative;list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--guide-border);border-radius:13px;overflow:hidden;background:#fff}
+.dukkan-guide-journey::before{content:"";position:absolute;top:46px;inset-inline:6.25%;height:1px;background:var(--guide-border)}
+.dukkan-guide-journey>li{position:relative;display:flex;flex-direction:column;gap:12px;padding:20px 20px 18px;min-width:0;border-inline-end:1px solid var(--guide-border);border-bottom:1px solid var(--guide-border)}
+.dukkan-guide-journey>li:nth-child(4n){border-inline-end:0}
+.dukkan-guide-journey>li:nth-last-child(-n+4){border-bottom:0}
+.dukkan-guide-step-icon{position:relative;z-index:1;display:grid;place-items:center;width:38px;height:38px;border:1px solid #cfdbd0;border-radius:11px;background:#fff;color:var(--guide-green)}
+.dukkan-guide-step-copy{display:flex;flex:1;flex-direction:column;align-items:flex-start;min-width:0}
+.dukkan-guide-number{font-size:10px;font-weight:750;color:#668272;letter-spacing:.08em}
+.dukkan-guide-step-copy h3{font-size:15px;font-weight:720;line-height:1.35;color:var(--guide-green);margin:5px 0 7px}
+.dukkan-guide-step-copy>p{font-size:12px;line-height:1.55;color:#56685d;margin:0 0 13px}
+.dukkan-guide-cta{display:inline-flex;align-items:center;gap:6px;margin-top:auto;color:var(--guide-green);font-weight:700;font-size:12px;line-height:1.4;padding:6px 0;border-bottom:1px solid transparent;text-align:start}
 .dukkan-guide-cta:hover{border-bottom-color:var(--guide-green)}
-.dukkan-guide-links{display:flex;flex-wrap:wrap;gap:4px 12px;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--guide-border);font-size:11.5px;color:var(--guide-muted)}
-.dukkan-guide-links button{color:#28543c;font-weight:650;text-decoration:underline;text-underline-offset:3px;padding:0}
-.dukkan-guide-reading{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--guide-border);border-radius:12px;overflow:hidden;background:#fff}
-.dukkan-guide-reading li{display:flex;gap:14px;align-items:flex-start;padding:20px 22px;border-bottom:1px solid var(--guide-border);min-width:0}
-.dukkan-guide-reading li:nth-child(odd){border-inline-end:1px solid var(--guide-border)}
-.dukkan-guide-reading li:nth-last-child(-n+2){border-bottom:0}
-.dukkan-guide-reading svg{flex-shrink:0;color:var(--guide-green);margin-top:2px}
-.dukkan-guide-reading strong{display:block;font-size:14px;font-weight:700;color:#1b3c2d;margin-bottom:5px}
-.dukkan-guide-reading p{font-size:12.5px;line-height:1.65;color:#5f7065;margin:0}
-.dukkan-guide-why{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.dukkan-guide-why .dukkan-guide-card h3{margin:0 0 9px;font-size:15.5px}
-.dukkan-guide-section .dukkan-guide-actions{margin-top:22px}
-.dukkan-guide-not{list-style:none;padding:0;margin:0;display:grid;gap:10px;max-width:560px}
-.dukkan-guide-not li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:1.55;color:#4f6257}
-.dukkan-guide-not svg{flex-shrink:0;color:#8c5a2b}
-.dukkan-guide-boundary{padding-bottom:20px}
-.dukkan-app[dir=rtl] .dukkan-guide-intro h1,.dukkan-app[dir=rtl] .dukkan-guide-heading h2{letter-spacing:0}
-.dukkan-app[dir=rtl] .dukkan-guide-arrow{transform:scaleX(-1)}
-.dukkan-app[dir=rtl] .dukkan-guide-card dt,.dukkan-app[dir=rtl] .dukkan-guide-number{letter-spacing:0}
-@media(max-width:1000px){.dukkan-guide-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.dukkan-guide-why{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:680px){.dukkan-guide{padding:24px 16px 40px}.dukkan-guide-intro{padding:26px 0 34px}.dukkan-guide-intro h1{font-size:34px}.dukkan-guide-intro p{font-size:14px}.dukkan-guide-section{padding:30px 0 32px}.dukkan-guide-steps,.dukkan-guide-why,.dukkan-guide-reading{grid-template-columns:1fr}.dukkan-guide-reading li:nth-child(odd){border-inline-end:0}.dukkan-guide-reading li:nth-last-child(2){border-bottom:1px solid var(--guide-border)}.dukkan-guide-card{padding:18px 16px}.dukkan-guide-actions [data-slot=button]{width:100%}}
+.dukkan-guide-cta:focus-visible,.dukkan-guide-records button:focus-visible{outline:2px solid #557b65;outline-offset:3px;border-radius:3px}
+.dukkan-guide-records{display:flex;flex-wrap:wrap;gap:7px 12px;padding-top:11px;margin-top:11px;width:100%;border-top:1px solid var(--guide-border)}
+.dukkan-guide-records button{display:inline-flex;align-items:center;gap:5px;color:#31543f;font-size:11px;font-weight:650;text-decoration:underline;text-underline-offset:3px;text-align:start}
+.dukkan-guide-records svg{flex-shrink:0}
+.dukkan-guide-trust{border-top:1px solid var(--guide-border);padding-top:30px}
+.dukkan-guide-trust h2{margin:0 0 17px}
+.dukkan-guide-trust ul{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-block:1px solid var(--guide-border)}
+.dukkan-guide-trust li{display:flex;align-items:flex-start;gap:10px;padding:15px 14px 15px 0;font-size:12px;line-height:1.55;color:#52645a;border-inline-end:1px solid var(--guide-border)}
+.dukkan-guide-trust li:not(:first-child){padding-inline-start:14px}
+.dukkan-guide-trust li:last-child{border-inline-end:0;padding-inline-end:0}
+.dukkan-guide-trust li svg{flex:0 0 auto;color:var(--guide-green);margin-top:1px}
+.dukkan-app[dir=rtl] .dukkan-guide-intro h1,.dukkan-app[dir=rtl] .dukkan-guide-heading h2,.dukkan-app[dir=rtl] .dukkan-guide-trust h2{letter-spacing:0}
+.dukkan-app[dir=rtl] .dukkan-guide-number{letter-spacing:0}
+@media(max-width:900px){.dukkan-guide-journey{grid-template-columns:repeat(2,minmax(0,1fr))}.dukkan-guide-journey>li:nth-child(4n){border-inline-end:1px solid var(--guide-border)}.dukkan-guide-journey>li:nth-child(2n){border-inline-end:0}.dukkan-guide-journey>li:nth-last-child(-n+4){border-bottom:1px solid var(--guide-border)}.dukkan-guide-journey>li:nth-last-child(-n+2){border-bottom:0}.dukkan-guide-journey::before{display:none}.dukkan-guide-trust ul{grid-template-columns:repeat(2,minmax(0,1fr))}.dukkan-guide-trust li:nth-child(2){border-inline-end:0;padding-inline-end:0}.dukkan-guide-trust li:nth-child(n+3){border-top:1px solid var(--guide-border)}}
+@media(max-width:600px){.dukkan-guide{padding:24px 16px 32px}.dukkan-guide-intro{padding:22px 0 28px}.dukkan-guide-intro h1{font-size:34px}.dukkan-guide-intro>p{font-size:14px}.dukkan-guide-section{padding:27px 0 30px}.dukkan-guide-journey{grid-template-columns:1fr}.dukkan-guide-journey>li,.dukkan-guide-journey>li:nth-child(4n){border-inline-end:0;border-bottom:1px solid var(--guide-border);flex-direction:row;gap:13px;padding:16px}.dukkan-guide-journey>li:last-child{border-bottom:0}.dukkan-guide-step-icon{width:34px;height:34px;flex:0 0 auto}.dukkan-guide-step-copy h3{font-size:14px}.dukkan-guide-step-copy>p{font-size:12px}.dukkan-guide-trust ul{grid-template-columns:1fr}.dukkan-guide-trust li,.dukkan-guide-trust li:not(:first-child),.dukkan-guide-trust li:nth-child(2){padding:12px 0;border-inline-end:0;border-top:1px solid var(--guide-border)}.dukkan-guide-trust li:first-child{border-top:0}.dukkan-guide-actions [data-slot=button]{width:100%}}
