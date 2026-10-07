@@ -76,7 +76,7 @@ export function WorkSidebar({revealRequest,recordDirty,language,scope,active,onS
  },[isOpen,mobile])
  if(!isOpen)return null
  const docTabs=documents.map(item=>({item,id:item.id,title:item.title}))
- const title=selectedDocument?.title||(active==='fill-progress'?(fillProgress?.status==='completed'?(ar?'ملف PDF جاهز':'PDF ready'):(ar?'تجهيز ملف PDF':'Preparing PDF')):(ar?'المستندات':'Documents'))
+ const title=selectedDocument?.title||(active==='fill-progress'?(ar?'تجهيز ملف PDF':'PDF preparation'):(ar?'المستندات':'Documents'))
  return <>
   {mobile&&<button className="work-panel-backdrop" aria-label={ar?'إغلاق لوحة المستندات':'Close document panel'} tabIndex={-1} onClick={requestClose}/>}
   <aside ref={asideRef} className={'dukkan-work-sidebar is-open '+(selectedDocument?'has-document ':'')+(wide?'is-wide ':'')+(mobile?'is-mobile-dialog':'')} dir={ar?'rtl':'ltr'} aria-label={ar?'لوحة المستند':'Document panel'} aria-modal={mobile||undefined} role={mobile?'dialog':undefined} aria-labelledby="work-panel-title">
@@ -95,7 +95,7 @@ export function WorkSidebar({revealRequest,recordDirty,language,scope,active,onS
      {docTabs.map(({item,id,title:itemTitle})=><section key={id} id={'work-content-'+id} role="tabpanel" aria-label={itemTitle} hidden={selectedId!==id}>
       <DocumentTab artifact={item} ar={ar} active={selectedId===id} onDirty={value=>setDirty(old=>old[id]===value?old:{...old,[id]:value})} onRefresh={onRefresh} onSavedVersion={version=>{setDocuments(old=>old.some(doc=>doc.id===version.id)?old:[...old,version]);onSelect(version.id)}} onReviewed={()=>setDocuments(old=>old.map(doc=>doc.id===id?{...doc,review:{hash:doc.hash}}:doc))}/>
      </section>)}
-     {!selectedDocument&&active==='fill-progress'&&fillProgress&&<FillProgressPanel progress={fillProgress} scope={scope} language={language} artifact={artifacts.find(item=>item.turnId===fillProgress.turnId&&item.kind==='official_pdf')} onOpenArtifact={onOpenArtifact}/>}
+     {!selectedDocument&&active==='fill-progress'&&fillProgress&&<FillProgressPanel progress={fillProgress} scope={scope} language={language} artifact={artifacts.find(item=>item.turnId===fillProgress.turnId&&item.kind==='official_pdf')} onOpenArtifact={onOpenArtifact} onReturnToChat={requestClose}/>}
      {!selectedDocument&&active!=='fill-progress'&&<section className="work-artifact-list" aria-label={ar?'المستندات':'Documents'}>
       {exampleScope&&onAsk&&<button className="work-example-link" onClick={()=>onAsk(officialDocumentPrompt)}><FileText size={14}/>{ar?'جهّز مستنداً رسمياً':'Prepare an official document'}</button>}
       {children&&active!=='saved'&&<div className="work-legacy-content">{recordDirty&&<p className="work-record-dirty" role="status">{ar?'تقديرات غير محفوظة':'Unsaved cost estimates'}</p>}{children}</div>}
@@ -106,24 +106,27 @@ export function WorkSidebar({revealRequest,recordDirty,language,scope,active,onS
   </aside>
  </>
 }
-function FillProgressPanel({progress,scope,language,artifact,onOpenArtifact}:{progress:WorkSidebarFillProgress;scope:string;language:'en'|'ar';artifact:ChatArtifact|undefined;onOpenArtifact?:((artifact:ChatArtifact)=>void)} ){
+function FillProgressPanel({progress,scope,language,artifact,onOpenArtifact,onReturnToChat}:{progress:WorkSidebarFillProgress;scope:string;language:'en'|'ar';artifact:ChatArtifact|undefined;onOpenArtifact?:((artifact:ChatArtifact)=>void);onReturnToChat?:()=>void} ){
  const ar=language==='ar'
- const [watching,setWatching]=useState(false)
- useEffect(()=>setWatching(false),[progress.turnId,artifact?.id,artifact?.hash])
+ const [watching,setWatching]=useState(false),[writing,setWriting]=useState(progress.status==='running')
+ useEffect(()=>{setWatching(false);setWriting(progress.status==='running')},[progress.turnId])
+ useEffect(()=>setWatching(false),[artifact?.id,artifact?.hash])
  const status=progress.status==='queued'?(ar?'في قائمة الانتظار':'Waiting to fill'):
-  progress.status==='running'?(ar?'جارٍ تعبئة الحقول':'Filling fields'):
+  progress.status==='running'||writing?(ar?'جارٍ تعبئة الحقول':'Filling fields'):
   progress.status==='needs_input'?(ar?'يتطلب استكمال معلومات':'More information is needed'):
   progress.status==='failed'?(ar?'توقف التجهيز':'Preparation stopped'):
   (ar?'اكتمل تجهيز الحقول':'Field filling completed')
  return <section className="work-fill-progress" aria-label={ar?'تقدم تجهيز المستند':'Document filling progress'}>
   <header><FileText size={18}/><div><h2>{ar?'تجهيز ملف PDF':'PDF preparation'}</h2><p role="status" aria-live="polite">{status}{progress.fields.length?` · ${progress.fields.length} ${ar?'حقول محدّثة':'fields updated'}`:''}</p></div></header>
-  {progress.preview&&<Suspense fallback={<p role="status">{ar?'جارٍ تحميل معاينة المستند…':'Loading the live document preview…'}</p>}><LivePdfFillPreview progress={progress.fields} preview={progress.preview} turnId={progress.turnId} scope={scope} language={language}/></Suspense>}
+  {progress.preview&&<Suspense fallback={<p role="status">{ar?'جارٍ تحميل معاينة المستند…':'Loading the live document preview…'}</p>}><LivePdfFillPreview progress={progress.fields} preview={progress.preview} turnId={progress.turnId} scope={scope} language={language} status={progress.status} onWritingChange={setWriting}/></Suspense>}
   {progress.fields.length>0?<details className="work-field-updates"><summary>{ar?'سجل تحديثات الحقول':'Field update history'} ({progress.fields.length})</summary><ol>{progress.fields.map((field,index)=><li key={`${field.page??''}-${field.name}-${index}`}><strong>{field.name}</strong>{field.value!==undefined&&<span dir="auto">{field.value|| (ar?'فارغ':'Blank')}</span>}{field.page!==undefined&&<small>{ar?`صفحة ${field.page}`:`Page ${field.page}`}</small>}</li>)}</ol></details>:<p className="work-fill-empty">{progress.status==='queued'?(ar?'سيظهر التحديث عند تعبئة أول حقل.':'Updates will appear when the first field is filled.'):(ar?'لم يصل تحديث للحقول بعد.':'No field updates have arrived yet.')}</p>}
-  {progress.status==='completed'&&artifact?<>
+  {progress.status==='completed'&&!writing&&artifact?<>
+   <p role="status">{ar?'اكتملت تعبئة الحقول التي زوّدتنا بها. يمكنك مراجعة المستند ثم تنزيله.':'The supplied fields are filled. You can review the document, then download it.'}</p>
    <button className="work-primary" onClick={()=>setWatching(value=>!value)}><Play size={15}/>{watching?(ar?'إخفاء التشغيل':'Hide playback'):(ar?'أعد تشغيل التحديثات':'Replay recorded updates')}</button>
    {watching&&<Suspense fallback={<p role="status">{ar?'جارٍ تحميل مشغل المستند…':'Loading the document playback…'}</p>}><PdfFillPlayback artifact={artifact} progress={progress.fields} language={language}/></Suspense>}
    {onOpenArtifact&&<button className="work-primary" onClick={()=>onOpenArtifact(artifact)}><FileText size={15}/>{ar?'افتح ملف PDF المُجهّز':'Open filled PDF'}</button>}
-  </>:progress.status==='completed'&&!artifact?<p className="work-fill-empty">{ar?'اكتمل تجهيز الحقول؛ لم يظهر ملف PDF في القائمة بعد.':'Filling completed; the PDF is not in the document list yet.'}</p>:null}
+   {onReturnToChat&&<button onClick={onReturnToChat}>{ar?'العودة إلى المحادثة':'Back to chat'}</button>}
+  </>:progress.status==='completed'&&!writing&&!artifact?<p className="work-fill-empty">{ar?'اكتمل تجهيز الحقول؛ لم يظهر ملف PDF في القائمة بعد.':'Filling completed; the PDF is not in the document list yet.'}</p>:null}
  </section>
 }
 

@@ -13,3 +13,11 @@
 .pdf-fill-live .pdf-playback-page{height:57vh;max-height:57vh}.pdf-fill-live .pdf-playback-current{font-size:12px}
 
 .work-field-updates{margin-block:14px;font-size:13px}.work-field-updates summary{cursor:pointer;color:#52685b}.pdf-playback-controls button[aria-pressed=true]{background:#e1eee4;border-color:#73957f}.pdf-fill-live{padding:12px}.pdf-fill-live .pdf-playback-current{font-size:13px}
+.pdf-live-typing-status{margin:7px 0;color:#285941;font-size:12px;font-weight:600}
+.pdf-live-sheet{position:relative;display:table;margin:0 auto;line-height:0}
+.pdf-live-sheet canvas{display:block}
+.pdf-live-field{position:absolute;box-sizing:border-box;display:flex;align-items:center;overflow:hidden;padding:1px 3px;background:#fff;color:#17251e;border:1px solid transparent;text-align:left;white-space:pre;overflow-wrap:normal;line-height:1.15;font:9px/1.15 Arial,sans-serif;unicode-bidi:plaintext}
+.pdf-live-field.is-typing{border-color:#57856a;box-shadow:0 0 0 1px #e8f1e9}
+.pdf-live-field.is-typing::after{content:"";flex:0 0 1px;height:1em;background:#285941;animation:pdf-live-caret 850ms steps(1,end) infinite}
+@keyframes pdf-live-caret{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.pdf-live-field.is-typing::after{animation:none}}

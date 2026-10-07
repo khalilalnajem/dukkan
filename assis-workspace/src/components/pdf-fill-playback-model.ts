@@ -6,6 +6,15 @@ export type PdfFillPlayback={initialValues:Record<string,string>;updates:Array<{
 const digest=/^[0-9a-f]{64}$/i;
 function requireValue(condition:unknown,message:string):asserts condition{if(!condition)throw new Error(message);}
 
+/** Character frames for the visible in-field typing treatment (Unicode code points stay whole). */
+export function pdfTypingFrames(value:string):string[]{
+ let visible='';const frames:string[]=[];
+ for(const character of Array.from(value)){visible+=character;frames.push(visible);}
+ return frames;
+}
+export function pdfTypingStartIndex(status:'queued'|'running'|'completed'|'needs_input'|'failed',progressLength:number):number{return status==='completed'?progressLength:0;}
+export function pdfNextTypingIndex(index:number):number{return Math.max(0,Math.floor(index))+1;}
+
 /** Validate saved provenance and turn progress into an exact, replayable field timeline. */
 export function preparePdfFillPlayback(artifact:PdfFillArtifact,progress:PdfFieldUpdate[],verifiedArtifactHash:string,manifest:PdfTemplateManifest):PdfFillPlayback{
  requireValue(artifact.kind==='official_pdf','This saved item is not an official PDF.');

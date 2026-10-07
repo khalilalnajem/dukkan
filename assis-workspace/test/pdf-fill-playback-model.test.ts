@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {preparePdfFillPlayback,pdfFillPlaybackValuesAt,prepareLivePdfFillPreview,type PdfFillArtifact,type PdfTemplateManifest} from '../src/components/pdf-fill-playback-model.ts'
+import {preparePdfFillPlayback,pdfFillPlaybackValuesAt,prepareLivePdfFillPreview,pdfTypingFrames,pdfTypingStartIndex,pdfNextTypingIndex,type PdfFillArtifact,type PdfTemplateManifest} from '../src/components/pdf-fill-playback-model.ts'
 
 const templateHash='a'.repeat(64),artifactHash='b'.repeat(64)
 const manifest:PdfTemplateManifest={id:'pearl-delta-official-form',templateSha256:templateHash,templatePath:'/demo/pearl-delta/Application-B-original.pdf'}
@@ -53,4 +53,18 @@ test('live preview accepts only observed values mapped to the verified source ma
  assert.throws(()=>prepareLivePdfFillPreview(liveManifest,[{name:'Unknown',value:'Invented',page:2}],templateHash),/does not belong/)
  assert.throws(()=>prepareLivePdfFillPreview(liveManifest,[{name:'Name',page:2}],templateHash),/incomplete/)
  assert.throws(()=>prepareLivePdfFillPreview(liveManifest,[],artifactHash),/hash check/)
+})
+
+test('live field typing advances in order and keeps Unicode characters intact',()=>{
+ const frames=pdfTypingFrames('A🙂ب')
+ assert.deepEqual(frames,['A','A🙂','A🙂ب'])
+ assert.equal(frames.at(-1),'A🙂ب')
+ assert.deepEqual(pdfTypingFrames(''),[])
+})
+
+test('live queue advances even when the next event has not arrived and completed mounts skip animation',()=>{
+ assert.equal(pdfNextTypingIndex(0),1)
+ assert.equal(pdfNextTypingIndex(1),2)
+ assert.equal(pdfTypingStartIndex('running',2),0)
+ assert.equal(pdfTypingStartIndex('completed',2),2)
 })
