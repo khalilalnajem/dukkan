@@ -1,0 +1,15 @@
+{
+  "synthetic": true,
+  "watermark": "FICTIONAL DEMO ONLY",
+  "facts": [
+    {
+      "field": "premises.unit",
+      "value": "12",
+      "origin": "founder",
+      "sourceRef": "synthetic-lease.pdf#page=1",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:05:00Z"
+    }
+  ],
+  "reason": "Founder confirms intake typo after reviewing synthetic lease; original PDF unchanged."
+}

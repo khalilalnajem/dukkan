@@ -1,0 +1,23 @@
+.lifecycle-dashboard .lifecycle-tabs button,
+.lifecycle-dashboard .lifecycle-record-head>span,
+.lifecycle-dashboard .lifecycle-service h3,
+.lifecycle-dashboard .lifecycle-service a,
+.lifecycle-dashboard .lifecycle-records a,
+.lifecycle-dashboard .lifecycle-records summary,
+.lifecycle-dashboard .lifecycle-document-row strong,
+.chat-documents>button,
+.chat-documents article strong,
+.chat-documents summary{display:inline-flex;align-items:center;gap:8px}
+.lifecycle-dashboard svg,.chat-documents svg{flex-shrink:0;stroke-width:1.7}
+.lifecycle-dashboard .lifecycle-tabs button{min-height:44px}
+.lifecycle-dashboard .lifecycle-tabs small{margin-inline-start:0}
+.lifecycle-dashboard .lifecycle-icon-button{width:44px;height:44px;min-width:44px;padding:0}
+.lifecycle-dashboard .lifecycle-metrics article>span{display:flex;align-items:center;gap:8px}
+.lifecycle-dashboard .lifecycle-file{display:flex;align-items:center;gap:10px;min-height:48px}
+.lifecycle-dashboard .lifecycle-file span:first-of-type{flex:1}
+.lifecycle-dashboard .lifecycle-file span:last-child{font-size:12px}
+.lifecycle-document-row{padding-block:12px;border-bottom:1px solid #d5dbd0}
+.chat-documents>button{min-height:44px;text-decoration:none}
+.chat-documents summary,.lifecycle-dashboard .lifecycle-records summary{min-height:36px;cursor:pointer}
+.chat-documents button:focus-visible,.chat-documents summary:focus-visible{outline:2px solid #214c39;outline-offset:3px}
+.lifecycle-impact{padding:12px;border:1px solid #b99c61;border-radius:8px;background:#fffaf0;margin:12px 0}.lifecycle-impact p{font-size:13px}.dukkan-cost-scenarios{margin-top:24px;border-top:1px solid #dce2d9;padding-top:16px}.dukkan-cost-scenarios summary{cursor:pointer;display:flex;gap:8px;align-items:center}.dukkan-cost-scenarios label{display:grid;gap:6px;margin:12px 0}.dukkan-cost-scenarios input,.dukkan-cost-scenarios textarea{max-width:100%;padding:8px;border:1px solid #ccd4c9;border-radius:6px;background:white}.dukkan-cost-scenarios article{padding:16px 0;border-top:1px solid #dce2d9}.dukkan-cost-scenarios dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px}.dukkan-cost-scenarios dd{margin:0}.dukkan-cost-scenarios p{font-size:13px;line-height:1.5}

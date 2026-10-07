@@ -1,0 +1,19 @@
+import assert from 'node:assert/strict';
+import {mkdtempSync,writeFileSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {createApp} from '../src/server.ts';
+import {openrouterConfig,createOpenRouterModel} from '../src/openrouter.ts';
+// Entirely invented test fixture. No saved business records, browser data or exports are read.
+const workspaceContext={brief:{idea:'FICTIONAL QA: Sand Demo sells monthly bilingual design services to small shops in Kuwait.',offer:'monthly bilingual design service'},tests:[{method:'SIMULATED interviews only',audience:'12 imaginary shop owners',decisionRule:'5 non-binding followups'}],results:[{text:'SIMULATED QA ONLY:3 of12 imaginary owners interested;7 prefer DIY;2 use freelancers. No real customers or sales.'}],decisions:[{choice:'keep_testing',reason:'Simulated result missed proposed threshold; no real evidence.'}],costs:{monthlyPrice:60,variableCost:15,fixedCost:90,units:5,spendingBudget:300}};
+const root=mkdtempSync(join(tmpdir(),'dukkan-decision-live-'));const app=await createApp({privateRoot:root,chatModel:createOpenRouterModel(openrouterConfig())});const receipts:any[]=[];
+try{
+ const {conversation}=app.chat.create({title:'Fictional decision-flow QA',workspaceId:'fictional-decision-qa'});
+ const steps=[
+ {requestedAction:{type:'stage_draft',stage:'validate'},content:'Create a proposed validation test for Sand Demo. All interview results are SIMULATED QA ONLY. Do not call them validation. Use a non-binding test until permissions are checked.'},
+ {requestedAction:{type:'stage_draft',stage:'plan'},content:'Create a plan using the fictional idea, simulated results and keep-testing decision. Monthly price60KWD,variablecost15perclient,fixedcost90permonth,5clients is a scenario not demand. Spending budget300KWD is not monthly revenue. Include founder hours as unknown; do not invent market statistics.'},
+ {requestedAction:{type:'application_worksheet'},content:'Prepare a fictional worksheet. Business name: Sand Demo. Activity description: monthly bilingual design service for small shops in Kuwait. My activity code is unknown. Legal form is unknown. Incorporation status is unknown. Do not infer these fields from phase labels. No submission.'},
+ {requestedAction:{type:'application_worksheet'},content:'Correct the fictional worksheet and save a new version: business_name is Sand Demo; activity_description is monthly bilingual design service for small shops in Kuwait. Clear activity_code,legal_form,incorporation_status and task_stage to unknown. Draft corrections only, not confirmed facts.'}
+ ];
+ for(const step of steps){const start=Date.now();const {turn}=app.chat.enqueue(conversation.id,{...step,workspaceContext});let result:any;while(Date.now()-start<240000){result=app.chat.turnSnapshot(turn.id);if(!['queued','running'].includes(result.turn.status))break;await new Promise(r=>setTimeout(r,300));}receipts.push({step:step.requestedAction,status:result.turn.status,error:result.turn.error,events:result.turn.events.map((e:any)=>({type:e.type,name:e.name,error:e.error})),artifacts:result.artifacts,confirmedFacts:result.case.facts.length,ms:Date.now()-start});writeFileSync(new URL('./evidence/decision-flow-live.json',import.meta.url),JSON.stringify(receipts,null,2)+'\n');console.log(JSON.stringify({step:step.requestedAction,status:result.turn.status,error:result.turn.error,artifacts:result.artifacts.map((a:any)=>({kind:a.kind,stage:a.stage,version:a.version,citations:a.citations.length,proposedTest:!!a.proposedTest,fields:a.fields})),ms:Date.now()-start}));assert.equal(result.turn.status,'completed');assert.equal(result.artifacts.length,1);assert.equal(result.case.facts.length,0);if(step.requestedAction.stage==='validate')assert.ok(result.artifacts[0].proposedTest);}
+}finally{app.chat.closed=true;for(const abort of app.chat.active.values())abort.abort();app.store.close();rmSync(root,{recursive:true,force:true});}

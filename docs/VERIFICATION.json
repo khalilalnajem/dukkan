@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-07",
+  "fullLocalTests": {
+    "backend": 143,
+    "frontend": 105,
+    "build": "passed, large-bundle warning"
+  },
+  "publicChecks": {
+    "backend": 40,
+    "frontend": 105,
+    "build": "passed"
+  },
+  "liveFullCoreFlow": "passed against private attributed snapshot",
+  "publicApiDemo": {
+    "passed": true,
+    "requests": 2,
+    "reportedCostUsd": 0.00120025,
+    "persistenceAfterReopen": true
+  },
+  "browser": {
+    "proposal": "real OpenRouter",
+    "reviewSave": "passed",
+    "reloadAndOperationsQuote": "passed",
+    "amountKwd": "0.999",
+    "basis": "simulated"
+  },
+  "publicationScan": {
+    "files": 240,
+    "issues": 0,
+    "credentialFilesExcluded": true,
+    "fullThirdPartySourcesExcluded": true,
+    "privateAssessmentExcluded": true
+  },
+  "githubCi": "workflow template supplied; not enabled because CLI OAuth lacks workflow scope",
+  "limits": [
+    "No full live all-record coverage",
+    "Full bilingual/accessibility audit open",
+    "Public clone needs authorised corpus for research",
+    "No connected email sender or government submission",
+    "Local prototype, no cloud deployment"
+  ]
+}

@@ -1,0 +1,21 @@
+import {lifecycleFields,validateLifecycle,normaliseLifecycle,recordStages,entityTypes} from '../../shared/lifecycle.ts';
+import {ensure} from '../contracts/index.ts';
+export const proposalFields={lifecycle:lifecycleFields,brief:['idea','customer','problem','alternative','offer','boundary','sector','location'],costs:['price','variable','fixed','units'],test_result:['hypothesisId','result'],decision:['hypothesisId','outcome','reason']} as const;
+export const workspaceProposalSchema={type:'object',properties:{kind:{type:'string',enum:Object.keys(proposalFields)},summary:{type:'string'},values:{type:'object',properties:Object.fromEntries([...new Set(Object.values(proposalFields).flat())].map(key=>[key,{type:'string',...(['price','variable','fixed','units'].includes(key)?{pattern:'^([0-9]+(\\.[0-9]+)?)?$',description:'Number only as a string, e.g. 60 or 15.50; no currency symbols, commas or units. Use empty string for unknown.'}:{}),...(key==='entityType'?{description:'Category record types: '+JSON.stringify(entityTypes)}:{}),...(key==='stage'?{description:'Category stages: '+JSON.stringify(recordStages)}:{}),...(key==='basis'?{enum:['actual','estimate','simulated']}:{ }),...(key==='sector'?{enum:['Retail & ecommerce','Food & drink','Professional services','Digital product','Other']}:{})}])),additionalProperties:false}},required:['kind','summary','values'],additionalProperties:false};
+export function workspaceProposal(args:any,workspace:any){
+ if(args&&args.values&&typeof args.values==='object'&&!Array.isArray(args.values))args={...args,values:Object.fromEntries(Object.entries(args.values).filter(([,value])=>value!==null&&value!==undefined).map(([key,value])=>[key,typeof value==='number'||typeof value==='boolean'?String(value):value]))};
+ const allowed=proposalFields[args.kind as keyof typeof proposalFields] as readonly string[]|undefined;
+ ensure(allowed&&typeof args.summary==='string'&&args.summary.trim()&&args.summary.length<=2000,'INVALID_WORKSPACE_PROPOSAL','A supported update and short summary are required');
+ ensure(args.values&&typeof args.values==='object'&&!Array.isArray(args.values)&&Object.keys(args.values).length>0&&Object.entries(args.values).every(([key,value])=>allowed.includes(key)&&typeof value==='string'&&value.length<=4000),'INVALID_WORKSPACE_PROPOSAL','Use only the fields allowed for this update. Allowed fields for kind '+JSON.stringify(args.kind)+': '+JSON.stringify(allowed)+'. Every value must be a string; omit unknown fields instead of sending null.');
+ ensure(workspace&&typeof workspace.updatedAt==='string','WORKSPACE_REQUIRED','A saved idea context is required');
+ if(args.kind==='lifecycle'){try{args={...args,values:normaliseLifecycle(args.values)};validateLifecycle(args.values,workspace.lifecycle||[]);}catch(e){ensure(false,'INVALID_WORKSPACE_PROPOSAL',(e as Error).message);}}
+ if(args.kind==='costs')ensure(Object.values(args.values).every(v=>v===''||(/^\d+(\.\d+)?$/.test(v as string)&&Number(v)>=0&&Number(v)<=1e12)),'INVALID_WORKSPACE_PROPOSAL','Costs must be non-negative numbers, or blank if unknown');
+ if(args.kind==='brief'&&Object.hasOwn(args.values,'sector'))ensure(['Retail & ecommerce','Food & drink','Professional services','Digital product','Other'].includes(args.values.sector),'INVALID_WORKSPACE_PROPOSAL','Choose a supported business sector');
+ if(args.kind==='brief'&&Object.hasOwn(args.values,'idea'))ensure(args.values.idea.trim(),'INVALID_WORKSPACE_PROPOSAL','An idea cannot be empty');
+ if(args.kind==='test_result'||args.kind==='decision'){
+  const h=workspace.hypotheses?.find((row:any)=>row.id===args.values.hypothesisId);ensure(h,'INVALID_WORKSPACE_PROPOSAL','Choose an existing test');
+  if(args.kind==='test_result')ensure(args.values.result?.trim(),'INVALID_WORKSPACE_PROPOSAL','A user-reported result is required');
+  if(args.kind==='decision')ensure(h.test?.result?.trim()&&['Keep testing','Supported so far','Revise the idea','Pause the idea'].includes(args.values.outcome)&&args.values.reason?.trim(),'INVALID_WORKSPACE_PROPOSAL','A recorded result, supported decision and reason are required');
+ }
+ return {kind:args.kind,summary:args.summary.trim(),values:args.values,expectedUpdatedAt:workspace.updatedAt};
+}

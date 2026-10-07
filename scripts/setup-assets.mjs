@@ -1,0 +1,17 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+const {PDFDocument}=createRequire(import.meta.url)('../assis-backend/node_modules/pdf-lib');
+const dir=new URL('../assis-workspace/public/demo/pearl-delta/',import.meta.url);
+const manifest=JSON.parse(await readFile(new URL('form-manifest.json',dir),'utf8'));
+const response=await fetch(manifest.sourceURL,{signal:AbortSignal.timeout(30000)});
+if(!response.ok)throw Error(`Official PDF download failed: HTTP ${response.status}`);
+const bytes=Buffer.from(await response.arrayBuffer());
+if(bytes.subarray(0,5).toString()!=='%PDF-')throw Error('Publisher did not return a PDF');
+if(createHash('sha256').update(bytes).digest('hex')!==manifest.templateSha256)throw Error('Official PDF changed. Review the new source before updating its checksum.');
+await mkdir(dir,{recursive:true});
+await writeFile(new URL('Application-B-original.pdf',dir),bytes);
+const pdf=await PDFDocument.load(bytes);
+for(const field of manifest.fields)pdf.getForm().getTextField(field.fieldName).setText(field.value);
+await writeFile(new URL('Pearl-Delta-KDIPA-Application-B-demo.pdf',dir),await pdf.save());
+console.log('Official template verified; local fictional preview prepared. Files remain ignored by Git.');

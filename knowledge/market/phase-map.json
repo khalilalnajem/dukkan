@@ -1,0 +1,594 @@
+{
+  "schemaVersion": 1,
+  "authority": "Dukkan-authored workflow and coverage map, not official source evidence",
+  "phases": {
+    "ideation": {
+      "decision": "Which specific customer problem is worth exploring?",
+      "sourceIDs": [
+        "MK-CSB-POP-2025",
+        "MK-CSB-ABSTRACT",
+        "MK-IPSOS-SHOPPER",
+        "MK-IPSOS-LEISURE",
+        "MK-IPSOS-FOOD",
+        "FW-DIAMOND",
+        "FW-VPC"
+      ],
+      "output": [
+        "Segment definition with geography and customer context",
+        "Problem hypothesis supported by dated evidence",
+        "Three alternative offers and assumptions",
+        "What evidence could disprove each idea"
+      ],
+      "gate": "A source-backed hypothesis is ready for customer discovery, not validated demand.",
+      "steps": [
+        "Describe one customer group and the problem you want to solve.",
+        "Find dated Kuwait evidence and record what it does not tell you.",
+        "Write a clear offer and the assumptions you need to test."
+      ],
+      "guidanceAuthority": "Dukkan-authored workflow, not an official requirement or eligibility decision"
+    },
+    "validation": {
+      "decision": "Will the target customer change behaviour or pay for the proposed offer?",
+      "sourceIDs": [
+        "MK-IPSOS-SHOPPER",
+        "MK-IPSOS-ONLINE",
+        "MK-IPSOS-FINANCE",
+        "MK-VISA-PAYMENTS-2026",
+        "FW-TEST",
+        "FW-TEST-PDF",
+        "FW-VPC"
+      ],
+      "output": [
+        "Interview guide about recent behaviour and existing alternatives",
+        "Experiment with hypothesis, target segment, method, metric, threshold and time limit",
+        "Anonymised observation log and sample limitations",
+        "Evidence-based continue, revise or stop decision"
+      ],
+      "gate": "Define a threshold before running the test. Separate stated interest, observed behaviour, paid conversion and repeat use. No automatic success threshold is inferred from public data.",
+      "steps": [
+        "Ask customers about recent behaviour and existing alternatives.",
+        "Set a test, audience and decision rule before collecting results.",
+        "Record what happened; separate interest from payment and repeat use."
+      ],
+      "guidanceAuthority": "Dukkan-authored workflow, not an official requirement or eligibility decision"
+    },
+    "strategy": {
+      "decision": "Which customer, offer, channel and business model make sense together?",
+      "sourceIDs": [
+        "FW-BMC",
+        "FW-VPC",
+        "MK-IPSOS-BRANDS",
+        "MK-IPSOS-RAMADAN",
+        "MK-DIGITAL-2026",
+        "MK-KDIPA-2024",
+        "MK-TRADE-OPPORTUNITIES"
+      ],
+      "output": [
+        "Customer segment and positioning statement",
+        "Competitor and substitute matrix with dated evidence",
+        "Business Model Canvas with assumptions and citations",
+        "Channel choice, seasonal plan and defensible differentiation hypothesis"
+      ],
+      "gate": "Public reports are broadly available. Advantage must be tested through execution, customer understanding and an offer competitors cannot easily match; source volume alone is not an advantage.",
+      "steps": [
+        "Compare competing offers, prices and channels for your customer.",
+        "Choose what makes your offer useful and how customers will find it.",
+        "Explain why you chose this direction and what could change it."
+      ],
+      "guidanceAuthority": "Dukkan-authored workflow, not an official requirement or eligibility decision"
+    },
+    "planning": {
+      "decision": "Can the business operate and finance a plausible launch?",
+      "sourceIDs": [
+        "FW-BMC",
+        "MK-CSB-ABSTRACT",
+        "MK-WB-INDICATORS",
+        "MK-IMF-2026",
+        "MK-CBK-VALUES",
+        "MK-CBK-COUNTS"
+      ],
+      "output": [
+        "Bottom-up market scenarios with accessible customers and realistic purchase frequency",
+        "Startup costs and monthly cash-flow scenarios in KWD",
+        "Unit economics, capacity, staffing and launch milestones",
+        "Risks, dependencies, source dates and explicit unknowns"
+      ],
+      "gate": "Use actual supplier and premises quotes where needed. Tag every number as observed, quoted, estimated or assumed. Never substitute GDP per capita for disposable income or national card totals for a sector market size.",
+      "calculations": {
+        "contributionPerUnit": "sellingPrice - variableCostPerUnit",
+        "breakEvenUnits": "fixedCosts / contributionPerUnit, only when contributionPerUnit > 0",
+        "closingCash": "openingCash + cashReceipts - cashPayments",
+        "marketScenario": "reachableCustomers * purchaseFrequency * averageTransactionValue; each assumption needs evidence and a range"
+      },
+      "calculationAuthority": "Dukkan-authored planning formulas; not a statistical observation or financial forecast",
+      "steps": [
+        "Collect dated quotes for setup and running costs.",
+        "Estimate price, unit cost, monthly fixed costs and sales scenarios.",
+        "Check contribution, break-even and cash needs before committing."
+      ],
+      "guidanceAuthority": "Dukkan-authored workflow, not an official requirement or eligibility decision"
+    },
+    "application": {
+      "decision": "What information and documents are needed for the selected legal route?",
+      "sourceIDs": [
+        "L08",
+        "L10",
+        "L11",
+        "ACT-S03",
+        "ACT-S04"
+      ],
+      "retrievalTool": "retrieve_guidance",
+      "output": [
+        "Confirmed activity description and unresolved activity-code questions",
+        "Legal form and ownership questions",
+        "Document checklist with source, condition and unresolved applicability",
+        "Preparation worksheet for human review"
+      ],
+      "gate": "The existing legal corpus remains research-only. An application worksheet is not a portal submission; a business plan does not establish eligibility.",
+      "steps": [
+        "Confirm activity, owners, nationality, employment and proposed manager.",
+        "Verify the eligible legal form, premises route and regulator approvals.",
+        "Prepare a draft checklist from the current official requirements; keep unknowns open."
+      ],
+      "guidanceAuthority": "Dukkan-authored workflow, not an official requirement or eligibility decision"
+    },
+    "licensing": {
+      "decision": "Which current authority requirements and approvals apply to this business?",
+      "sourceIDs": [
+        "L01",
+        "L02",
+        "L03",
+        "L04",
+        "L05",
+        "L06",
+        "L09",
+        "L11",
+        "L12",
+        "L13"
+      ],
+      "retrievalTool": "retrieve_guidance",
+      "output": [
+        "Route-specific authority and approval map",
+        "Current-source review, fee questions and official handoff links",
+        "Missing-document and discrepancy resolution",
+        "Review of exact preparation-pack version"
+      ],
+      "gate": "Current consolidated law, activity eligibility, premises and regulator approvals must be resolved for the specific case. This expansion activates no legal rules and submits nothing.",
+      "steps": [
+        "Confirm the current official process, documents and fees for your route.",
+        "Review the completed documents and required approvals before applying.",
+        "Record an issued licence only when you have the official evidence."
+      ],
+      "guidanceAuthority": "Dukkan-authored workflow, not an official requirement or eligibility decision"
+    }
+  },
+  "sectors": [
+    {
+      "sector": "Agriculture and fishing",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Oil, gas and extraction",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Manufacturing",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Energy, water, waste and environmental services",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Construction and building trades",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Wholesale and retail",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Food, restaurants and cafés",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Transport, logistics and delivery",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Hospitality and tourism",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Information, technology and communications",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Finance and insurance",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Real estate and property services",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Professional, scientific and creative services",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Administrative and business support services",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Education and training",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Healthcare and social services",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Arts, entertainment, sport and recreation",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    },
+    {
+      "sector": "Personal, household and repair services",
+      "foundation": [
+        "MK-CSB-ABSTRACT",
+        "MK-CSB-POP-2025",
+        "MK-IMF-2026",
+        "MK-WB-INDICATORS"
+      ],
+      "coverage": "Cross-sector foundation; not a complete sector assessment",
+      "requiredNext": [
+        "Specific activity and customer segment",
+        "Dated competitor/substitute inventory and price observations",
+        "Local operating cost and supplier evidence",
+        "Customer interviews or observed demand",
+        "Current sector regulator and activity-code requirements"
+      ]
+    }
+  ],
+  "globalGaps": [
+    "No exhaustive current consolidated legal audit or all-sector licence mapping",
+    "No comprehensive business/competitor directory or live local prices and rents",
+    "No private household microdata, cardholder records or individual credit records",
+    "No founder-specific interviews, experiments or sales evidence yet",
+    "CSB 2019–2021 household survey file not recovered; only catalogue and cited aggregate report available",
+    "Not every published table/chart has been visually audited; research extraction is not a validated numerical database",
+    "Reuse rights for third-party reports need review before redistribution or commercial product publication"
+  ],
+  "webappStages": {
+    "idea": {
+      "phases": [
+        "ideation"
+      ],
+      "heading": {
+        "en": "Steps to shape your idea",
+        "ar": "خطوات تحديد الفكرة"
+      },
+      "steps": {
+        "en": [
+          "Describe one customer group and the problem you want to solve.",
+          "Find dated Kuwait evidence and record what it does not tell you.",
+          "Write a clear offer and the assumptions you need to test."
+        ],
+        "ar": [
+          "حدّد العميل والمشكلة التي تريد حلّها.",
+          "ابحث عن بيانات كويتية مؤرخة وسجّل حدودها.",
+          "اكتب عرضك والافتراضات التي تحتاج إلى اختبار."
+        ]
+      },
+      "needed": {
+        "en": "Customer group, problem and proposed offer.",
+        "ar": "العميل المستهدف والمشكلة والعرض المقترح."
+      }
+    },
+    "validate": {
+      "phases": [
+        "validation"
+      ],
+      "heading": {
+        "en": "Steps to test demand",
+        "ar": "خطوات اختبار الطلب"
+      },
+      "steps": {
+        "en": [
+          "Ask customers about recent behaviour and existing alternatives.",
+          "Set a test, audience and decision rule before collecting results.",
+          "Record what happened; separate interest from payment and repeat use."
+        ],
+        "ar": [
+          "اسأل العملاء عن سلوكهم السابق والبدائل التي يستخدمونها.",
+          "حدّد الاختبار والعينة ومعيار القرار قبل جمع النتائج.",
+          "سجّل النتائج وافصل الاهتمام عن الدفع وتكرار الشراء."
+        ]
+      },
+      "needed": {
+        "en": "Real customer observations and test results. Sample results are not validation.",
+        "ar": "ملاحظات فعلية ونتائج اختبار. النتائج الافتراضية لا تثبت الطلب."
+      }
+    },
+    "plan": {
+      "phases": [
+        "strategy",
+        "planning"
+      ],
+      "heading": {
+        "en": "Steps to choose a direction and plan",
+        "ar": "خطوات اختيار التوجّه والتخطيط"
+      },
+      "steps": {
+        "en": [
+          "Compare competing offers, prices and channels for your customer.",
+          "Choose what makes your offer useful and how customers will find it.",
+          "Collect dated quotes for setup and running costs.",
+          "Estimate price, unit cost, monthly fixed costs and sales scenarios.",
+          "Check contribution, break-even and cash needs before committing."
+        ],
+        "ar": [
+          "قارن عروض المنافسين وأسعارهم وقنواتهم.",
+          "حدّد قيمة عرضك وكيف ستصل إلى العملاء.",
+          "اجمع عروض أسعار مؤرخة للتأسيس والتشغيل.",
+          "قدّر السعر وتكلفة الوحدة والتكاليف الثابتة وسيناريوهات المبيعات.",
+          "راجع هامش المساهمة والتعادل والاحتياج النقدي."
+        ]
+      },
+      "needed": {
+        "en": "Competitor observations, supplier quotes and your cost assumptions.",
+        "ar": "ملاحظات عن المنافسين وعروض الموردين وافتراضات التكلفة."
+      }
+    },
+    "apply": {
+      "phases": [
+        "application",
+        "licensing"
+      ],
+      "heading": {
+        "en": "Steps to prepare for licensing",
+        "ar": "خطوات الاستعداد للترخيص"
+      },
+      "steps": {
+        "en": [
+          "Confirm activity, owners, nationality, employment and proposed manager.",
+          "Verify the eligible legal form, premises route and regulator approvals.",
+          "Prepare a draft checklist from the current official requirements; keep unknowns open.",
+          "Confirm the current official process, documents and fees for your route.",
+          "Record an issued licence only when you have the official evidence."
+        ],
+        "ar": [
+          "حدّد النشاط والملّاك والجنسية والعمل والمدير المقترح.",
+          "تحقق من الشكل القانوني والمقر والموافقات المناسبة لحالتك.",
+          "حضّر قائمة مستندات من المتطلبات الرسمية الحالية واترك المجهول مفتوحاً.",
+          "تحقق من الإجراءات والمستندات والرسوم الحالية لمسارك.",
+          "لا تسجّل صدور الترخيص إلا بوجود إثبات رسمي."
+        ]
+      },
+      "needed": {
+        "en": "Your founder details and a verified checklist for the selected activity. Eligibility is not yet confirmed.",
+        "ar": "بيانات المؤسس وقائمة موثقة للنشاط المختار. الأهلية لم تُؤكّد بعد."
+      }
+    }
+  }
+}

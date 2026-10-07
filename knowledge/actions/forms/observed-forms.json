@@ -1,0 +1,194 @@
+{
+  "schemaVersion": "1.0",
+  "forms": [
+    {
+      "id": "ACT-F01",
+      "kind": "official_public_contact_form",
+      "title": "MOCI contact form; not a licence application",
+      "source": {
+        "sourceId": "ACT-S01",
+        "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+        "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+        "locator": "contact_us_form"
+      },
+      "observationMethod": "Downloaded original HTML inspected, including labels, names, option values and maxlength. No live fill, CAPTCHA solution or submission.",
+      "fields": [
+        {
+          "key": "sender_name",
+          "labelAr": "اسم",
+          "htmlName": "name",
+          "htmlId": "id_name",
+          "observedControlType": "text",
+          "maxLength": 255,
+          "officialRequiredness": "unknown",
+          "requirednessExplanation": "HTML required observed only on CAPTCHA; absence on others does not establish server-side optionality.",
+          "localPreparationRequired": true,
+          "value": null,
+          "valueStatus": "needs_input",
+          "provenance": {
+            "sourceId": "ACT-S01",
+            "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+            "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+            "locator": "HTML name=name"
+          },
+          "validation": [
+            "Never infer missing data.",
+            "Recheck live label and constraints before human handoff."
+          ]
+        },
+        {
+          "key": "reply_email",
+          "labelAr": "البريد الإلكتروني",
+          "htmlName": "email",
+          "htmlId": "id_email",
+          "observedControlType": "text",
+          "maxLength": 254,
+          "officialRequiredness": "unknown",
+          "requirednessExplanation": "HTML required observed only on CAPTCHA; absence on others does not establish server-side optionality.",
+          "localPreparationRequired": true,
+          "value": null,
+          "valueStatus": "needs_input",
+          "provenance": {
+            "sourceId": "ACT-S01",
+            "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+            "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+            "locator": "HTML name=email"
+          },
+          "validation": [
+            "Never infer missing data.",
+            "Recheck live label and constraints before human handoff.",
+            "Local policy: one syntactically valid reply address provided by the human; strip CR/LF; no guessed sender."
+          ]
+        },
+        {
+          "key": "department",
+          "labelAr": "اختر الموظف",
+          "htmlName": "choose_employee",
+          "htmlId": "id_choose_employee",
+          "observedControlType": "select",
+          "maxLength": null,
+          "officialRequiredness": "unknown",
+          "requirednessExplanation": "HTML required observed only on CAPTCHA; absence on others does not establish server-side optionality.",
+          "localPreparationRequired": true,
+          "value": null,
+          "valueStatus": "needs_input",
+          "provenance": {
+            "sourceId": "ACT-S01",
+            "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+            "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+            "locator": "HTML name=choose_employee"
+          },
+          "validation": [
+            "Never infer missing data.",
+            "Recheck live label and constraints before human handoff."
+          ],
+          "observedOptions": [
+            {
+              "label": "مدير إدارة مركز الكويت للأعمال",
+              "value": "65"
+            },
+            {
+              "label": "إدارة السجل التجاري والأنشطة الإقتصادية",
+              "value": "64"
+            }
+          ],
+          "selectionPolicy": "KBC 65 for this draft route enquiry only after live option and destination review; economic-activity office 64 only after a human chooses that route."
+        },
+        {
+          "key": "subject",
+          "labelAr": "الموضوع",
+          "htmlName": "subject",
+          "htmlId": "id_subject",
+          "observedControlType": "text",
+          "maxLength": 255,
+          "officialRequiredness": "unknown",
+          "requirednessExplanation": "HTML required observed only on CAPTCHA; absence on others does not establish server-side optionality.",
+          "localPreparationRequired": true,
+          "value": null,
+          "valueStatus": "needs_input",
+          "provenance": {
+            "sourceId": "ACT-S01",
+            "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+            "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+            "locator": "HTML name=subject"
+          },
+          "validation": [
+            "Never infer missing data.",
+            "Recheck live label and constraints before human handoff."
+          ]
+        },
+        {
+          "key": "message",
+          "labelAr": "الرسالة",
+          "htmlName": "message",
+          "htmlId": "id_message",
+          "observedControlType": "textarea",
+          "maxLength": null,
+          "officialRequiredness": "unknown",
+          "requirednessExplanation": "HTML required observed only on CAPTCHA; absence on others does not establish server-side optionality.",
+          "localPreparationRequired": true,
+          "value": null,
+          "valueStatus": "needs_input",
+          "provenance": {
+            "sourceId": "ACT-S01",
+            "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+            "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+            "locator": "HTML name=message"
+          },
+          "validation": [
+            "Never infer missing data.",
+            "Recheck live label and constraints before human handoff."
+          ]
+        },
+        {
+          "key": "captcha",
+          "labelAr": "أدخل الحروف الظاهرة أعلاه",
+          "htmlName": "captcha_value",
+          "htmlId": "id_captcha_value",
+          "observedControlType": "text",
+          "maxLength": null,
+          "officialRequiredness": "required_html_attribute",
+          "requirednessExplanation": "HTML required observed only on CAPTCHA; absence on others does not establish server-side optionality.",
+          "localPreparationRequired": false,
+          "value": null,
+          "valueStatus": "human_only_at_live_session",
+          "provenance": {
+            "sourceId": "ACT-S01",
+            "officialSourceURL": "https://www.moci.gov.kw/ar/contact-us/",
+            "retrievedAt": "2026-09-23T06:50:45.724991+00:00",
+            "locator": "HTML name=captcha_value"
+          },
+          "validation": [
+            "Never infer missing data.",
+            "Recheck live label and constraints before human handoff."
+          ]
+        }
+      ],
+      "submitLabel": "إرسال",
+      "submissionEnabled": false,
+      "hiddenControls": [
+        "csrfmiddlewaretoken",
+        "contact_us_form",
+        "captcha_code"
+      ],
+      "hiddenControlPolicy": "Never reuse captured values or treat this as an API. Let the official live page manage its own session; do not include values in retrieval chunks.",
+      "authentication": "Contact fields are public. Unrelated site login modal is not evidence this form needs login. CAPTCHA observed.",
+      "attachments": "No attachment control observed in this contact form.",
+      "serverValidation": "Not tested; no POST performed."
+    },
+    {
+      "id": "ACT-F02",
+      "kind": "official_licensing_form_not_observed",
+      "source": {
+        "sourceId": "ACT-S08",
+        "officialSourceURL": "https://e-kbc.moci.gov.kw/",
+        "retrievedAt": "2026-09-23T06:50:47.906806+00:00",
+        "locator": "access denied body"
+      },
+      "fields": [],
+      "status": "blocked_not_observed",
+      "reason": "Portal returned not authorised to use services at present. Cause not established; no authentication attempted.",
+      "fallback": "forms/madar-preparation-worksheet.json"
+    }
+  ]
+}

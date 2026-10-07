@@ -1,0 +1,252 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ACT-W01",
+  "title": "Dikan (دكان) preparation worksheet, not an official licence application",
+  "fictional": true,
+  "canSubmit": false,
+  "eligibility": "unresolved",
+  "officialApplicationFieldsObserved": false,
+  "fields": [
+    {
+      "key": "company_name",
+      "label": "Company name",
+      "value": "Madar Design Studio",
+      "valueStatus": "fictional_demo",
+      "requiredness": "local_context",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "legal_form",
+      "label": "Legal form",
+      "value": "one_person_company",
+      "valueStatus": "assumed_for_demo",
+      "requiredness": "local_context",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "incorporation",
+      "label": "Incorporation",
+      "value": "assumed_incorporated",
+      "valueStatus": "assumed_for_demo",
+      "requiredness": "not_verified",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "objective",
+      "label": "Current objective",
+      "value": "prepare_first_commercial_licence",
+      "valueStatus": "user_scope",
+      "requiredness": "local_context",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "activity_description",
+      "label": "Exact services proposed",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "needed_to_ask_route",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "activity_code",
+      "label": "Official activity code",
+      "value": null,
+      "valueStatus": "unresolved",
+      "requiredness": "route_eligibility_unresolved",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "commercial_registration_reference",
+      "label": "Commercial registration evidence/reference",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "guide_condition_not_observed_portal_field",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S04",
+        "officialSourceURL": "https://kbc.moci.gov.kw/Files/ServicesandTransactions/db912f6c-bda2-4d5f-bfd7-3d70cdaeb628.pdf",
+        "retrievedAt": "2026-09-23T06:50:45.725767+00:00",
+        "locator": "physical page 3 conditions"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "premises",
+      "label": "Physical premises evidence",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "published_service_condition",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S03",
+        "officialSourceURL": "https://beta.moci.gov.kw/ar/es/c_service/detail/67899/",
+        "retrievedAt": "2026-09-23T06:50:45.725698+00:00",
+        "locator": "conditions"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "lease_document",
+      "label": "Lease in company or owner name",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "published_required_document",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S03",
+        "officialSourceURL": "https://beta.moci.gov.kw/ar/es/c_service/detail/67899/",
+        "retrievedAt": "2026-09-23T06:50:45.725698+00:00",
+        "locator": "required documents item 1"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "current_month_rent_receipt",
+      "label": "Current-month rent receipt",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "published_required_document",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S03",
+        "officialSourceURL": "https://beta.moci.gov.kw/ar/es/c_service/detail/67899/",
+        "retrievedAt": "2026-09-23T06:50:45.725698+00:00",
+        "locator": "required documents item 2"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "regulator_approval",
+      "label": "Relevant regulator approval",
+      "value": null,
+      "valueStatus": "applicability_unknown",
+      "requiredness": "conditional",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S03",
+        "officialSourceURL": "https://beta.moci.gov.kw/ar/es/c_service/detail/67899/",
+        "retrievedAt": "2026-09-23T06:50:45.725698+00:00",
+        "locator": "conditions"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "owner_nationality",
+      "label": "Owner nationality category",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "eligibility_question_not_official_field",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S04",
+        "officialSourceURL": "https://kbc.moci.gov.kw/Files/ServicesandTransactions/db912f6c-bda2-4d5f-bfd7-3d70cdaeb628.pdf",
+        "retrievedAt": "2026-09-23T06:50:45.725767+00:00",
+        "locator": "physical page 1; formation context only"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "manager_status",
+      "label": "Manager age/employment/nationality categories",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "eligibility_question_not_official_field",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S04",
+        "officialSourceURL": "https://kbc.moci.gov.kw/Files/ServicesandTransactions/db912f6c-bda2-4d5f-bfd7-3d70cdaeb628.pdf",
+        "retrievedAt": "2026-09-23T06:50:45.725767+00:00",
+        "locator": "physical page 1; formation context only"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "representative_authority",
+      "label": "Authority to act for company",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "current_requirements_unknown",
+      "officialFieldName": null,
+      "provenance": {
+        "sourceId": "ACT-S04",
+        "officialSourceURL": "https://kbc.moci.gov.kw/Files/ServicesandTransactions/db912f6c-bda2-4d5f-bfd7-3d70cdaeb628.pdf",
+        "retrievedAt": "2026-09-23T06:50:45.725767+00:00",
+        "locator": "physical page 4 attendance personally or by power of attorney"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "application_reference",
+      "label": "Future application reference",
+      "value": null,
+      "valueStatus": "no_application_exists",
+      "requiredness": "future_only",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "sender_name",
+      "label": "Sender name",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "needed_for_reviewed_enquiry",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    },
+    {
+      "key": "reply_email",
+      "label": "Reply email",
+      "value": null,
+      "valueStatus": "needs_input",
+      "requiredness": "needed_for_reviewed_enquiry",
+      "officialFieldName": null,
+      "provenance": {
+        "origin": "Dikan preparation field, not observed official field"
+      },
+      "validation": "Do not infer; require human evidence before converting an assumption to a verified fact."
+    }
+  ],
+  "requestedOfficialFieldList": [
+    "Exact current first-licence service and applicable activity code",
+    "Current mandatory field labels, permitted values, conditional fields and formats",
+    "Required attachments, accepted file types/sizes and validity periods",
+    "Current authorised signatory or representative requirements",
+    "Whether the route is available in KBC or Sahel Business for this case",
+    "Current fee and appointment/payment stages"
+  ],
+  "restrictions": [
+    "No invented IDs, nationalities, premises, legal approvals or application reference.",
+    "Company name does not prove the services performed or activity code.",
+    "No assumption that incorporation alone establishes licensing eligibility."
+  ]
+}

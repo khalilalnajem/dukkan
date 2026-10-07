@@ -1,0 +1,12 @@
+import {useState,useEffect} from 'react'
+import {Save,RotateCcw} from 'lucide-react'
+export function DraftFieldPreview({fields,label='Working preview'}:{fields:Record<string,string|null>;label?:string}){
+ return <article className="work-live-preview" aria-label={label}><small>{label}</small><h3>{fields.business_name||'Business name not provided'}</h3><p>Preparation worksheet · No official form is filled or submitted.</p><dl>{Object.entries(fields).map(([key,value])=><div key={key}><dt>{key.replaceAll('_',' ')}</dt><dd>{value?.trim()||'Not provided'}</dd></div>)}</dl><p>Typed values are draft inputs, not confirmed facts. Review sources and applicability before acting.</p></article>
+}
+export function LiveDocumentExample({onDirty}:{onDirty:(dirty:boolean)=>void}){
+ const initial={business_name:'SYNTHETIC Studio',activity_description:'Fictional design service for editing practice',legal_form:''}
+ const [fields,setFields]=useState(initial),[versions,setVersions]=useState([initial]),[selected,setSelected]=useState(0)
+ const dirty=JSON.stringify(fields)!==JSON.stringify(versions.at(-1))
+ useEffect(()=>onDirty(dirty),[dirty])
+ return <div className="work-document"><h2>Live document example</h2><p>Fictional practice only. Versions stay in this tab until closed; no AI call or business record change.</p><p role="status">{dirty?'Unsaved example changes':`Example version ${versions.length} saved in this tab`}</p><div className="work-document-toolbar"><button className="work-primary" disabled={!dirty} onClick={()=>{setVersions([...versions,{...fields}]);setSelected(versions.length)}}><Save size={15}/>Save example version</button><button disabled={!dirty} onClick={()=>setFields({...versions.at(-1)!})}><RotateCcw size={15}/>Discard edits</button></div><div className="work-live-editor"><div>{Object.entries(fields).map(([key,value])=><label key={key}>{key.replaceAll('_',' ')}<input aria-label={'Example '+key.replaceAll('_',' ')} value={value} onChange={e=>setFields({...fields,[key]:e.target.value})}/></label>)}</div><DraftFieldPreview fields={fields} label={dirty?'Working preview · Unsaved':'Working preview · Example'}/></div><details><summary>Saved example versions · {versions.length}</summary><label>View version<select value={selected} onChange={e=>setSelected(Number(e.target.value))}>{versions.map((_,i)=><option key={i} value={i}>Version {i+1}</option>)}</select></label><DraftFieldPreview fields={versions[selected]} label={`Saved example version ${selected+1}`}/></details></div>
+}

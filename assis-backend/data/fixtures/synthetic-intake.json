@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "watermark": "FICTIONAL DEMO ONLY",
+  "businessId": "example-madar",
+  "facts": [
+    {
+      "field": "business.name",
+      "value": "Madar Design Studio",
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:00:00Z"
+    },
+    {
+      "field": "founder.name",
+      "value": "Mariam (synthetic)",
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:00:00Z"
+    },
+    {
+      "field": "business.activity",
+      "value": "Visual identity and digital design deliverables",
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:00:00Z"
+    },
+    {
+      "field": "business.incorporation",
+      "value": "Assumed incorporated and commercially registered; not verified",
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:00:00Z"
+    },
+    {
+      "field": "business.licence",
+      "value": "No licence claimed",
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:00:00Z"
+    },
+    {
+      "field": "premises.unit",
+      "value": "21",
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": "Mariam (synthetic)",
+      "confirmedAt": "2026-09-23T00:00:00Z"
+    },
+    {
+      "field": "founder.nationality",
+      "value": null,
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": null,
+      "confirmedAt": null
+    },
+    {
+      "field": "founder.age",
+      "value": null,
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": null,
+      "confirmedAt": null
+    },
+    {
+      "field": "founder.employment",
+      "value": null,
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": null,
+      "confirmedAt": null
+    },
+    {
+      "field": "business.activityCode",
+      "value": null,
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": null,
+      "confirmedAt": null
+    },
+    {
+      "field": "costs.officialFees",
+      "value": null,
+      "origin": "synthetic_founder",
+      "sourceRef": "synthetic-intake.json",
+      "confirmedBy": null,
+      "confirmedAt": null
+    }
+  ]
+}

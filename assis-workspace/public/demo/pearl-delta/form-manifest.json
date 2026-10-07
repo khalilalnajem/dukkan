@@ -1,0 +1,108 @@
+{
+  "id": "pearl-delta-official-form",
+  "title": "Mingyuan Lighting: KDIPA branch application - demonstration",
+  "format": "pdf",
+  "status": "prepared",
+  "sourceURL": "https://kdipa.gov.kw/wp-content/uploads/2021/09/Application-B.pdf",
+  "sourcePageURL": "https://kdipa.gov.kw/investors-service-center/investment-licensing-procedures/",
+  "capturedAt": "2026-09-26",
+  "templateSha256": "58f4e6296b7fe0d2788997b9826c04d28c8ffdb83f82b778941da98b7f325ab9",
+  "templatePath": "/demo/pearl-delta/Application-B-original.pdf",
+  "path": "/demo/pearl-delta/Pearl-Delta-KDIPA-Application-B-demo.pdf",
+  "fields": [
+    {
+      "id": "Name",
+      "fieldName": "Name",
+      "label": "Name",
+      "value": "Mingyuan Lighting Co., Ltd. - fictional",
+      "page": 2,
+      "x": 75.36,
+      "y": 620.075,
+      "width": 444.96000000000004,
+      "height": 16.101999999999975,
+      "fontSize": 9
+    },
+    {
+      "id": "Nationality",
+      "fieldName": "Nationality",
+      "label": "Nationality",
+      "value": "China - demonstration",
+      "page": 2,
+      "x": 103.56,
+      "y": 590.782,
+      "width": 406.32,
+      "height": 19.243999999999915,
+      "fontSize": 9
+    },
+    {
+      "id": "Objectives",
+      "fieldName": "Objectives",
+      "label": "Objectives",
+      "value": "Commercial LED lighting supply and technical support - proposed",
+      "page": 2,
+      "x": 97.5273,
+      "y": 455.308,
+      "width": 412.6797,
+      "height": 19.898000000000025,
+      "fontSize": 9
+    },
+    {
+      "id": "Head Ofﬁce",
+      "fieldName": "Head Ofﬁce",
+      "label": "Head Ofﬁce",
+      "value": "Shenzhen, China - fictional; address unconfirmed",
+      "page": 2,
+      "x": 106.2,
+      "y": 277.571,
+      "width": 417.84,
+      "height": 17.42199999999997,
+      "fontSize": 9
+    },
+    {
+      "id": "Email",
+      "fieldName": "Email",
+      "label": "Email",
+      "value": "contact@mingyuan.example",
+      "page": 2,
+      "x": 83.16,
+      "y": 153.075,
+      "width": 394.32000000000005,
+      "height": 19.167,
+      "fontSize": 9
+    },
+    {
+      "id": "Type of economic activity",
+      "fieldName": "Type of economic activity",
+      "label": "Type of economic activity",
+      "value": "Proposed LED lighting supply; eligibility to be confirmed",
+      "page": 4,
+      "x": 168.12,
+      "y": 474.231,
+      "width": 286.8,
+      "height": 21.0,
+      "fontSize": 9
+    },
+    {
+      "id": "Objectives_2",
+      "fieldName": "Objectives_2",
+      "label": "Objectives_2",
+      "value": "Explore Kuwait commercial lighting distribution and project supply",
+      "page": 4,
+      "x": 100.8,
+      "y": 447.159,
+      "width": 409.44,
+      "height": 21.0,
+      "fontSize": 9
+    }
+  ],
+  "provenance": "Original KDIPA Application B with actual AcroForm fields filled externally by Codex using fictional example details. Branch investment licensing route eligibility is unconfirmed. Not a issued commercial licence and not submitted.",
+  "missing": [
+    "Activity eligibility and correct licensing route",
+    "Legal company registration and shareholder evidence",
+    "Verified headquarters and authorised contact",
+    "Capital and investment amounts",
+    "Branch manager",
+    "Required attachments",
+    "Authorised signatures"
+  ]
+}

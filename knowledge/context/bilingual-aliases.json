@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "groups": [
+    [
+      "licence",
+      "license",
+      "licensing",
+      "ترخيص",
+      "رخصة"
+    ],
+    [
+      "one-person",
+      "one person company",
+      "single person company",
+      "شركة الشخص الواحد",
+      "الشخص الواحد"
+    ],
+    [
+      "incorporation",
+      "تأسيس"
+    ],
+    [
+      "commercial registration",
+      "commercial register",
+      "السجل التجاري"
+    ],
+    [
+      "premises",
+      "office",
+      "مقر",
+      "محل"
+    ],
+    [
+      "lease",
+      "rent",
+      "عقد ايجار",
+      "عقد الإيجار",
+      "إيجار"
+    ],
+    [
+      "fee",
+      "fees",
+      "رسوم"
+    ],
+    [
+      "activity",
+      "activity code",
+      "نشاط",
+      "أنشطة",
+      "انشطة"
+    ],
+    [
+      "contact",
+      "email",
+      "بريد",
+      "تواصل"
+    ],
+    [
+      "form",
+      "application",
+      "طلب",
+      "نموذج"
+    ],
+    [
+      "privacy",
+      "data protection",
+      "خصوصية",
+      "حماية البيانات"
+    ],
+    [
+      "owner",
+      "ownership",
+      "مالك",
+      "ملكية"
+    ]
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "assis-local-backend",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node --experimental-strip-types src/server.ts",
+    "test": "node --experimental-strip-types --test test/openrouter.test.ts test/siliconflow.test.ts test/siliconflow-catalogue.test.ts test/fallback-model.test.ts test/business-records.test.ts test/workspace-proposal.test.ts test/workspace-model-context.test.ts test/native-pdf.test.ts test/email.test.ts test/stage-request.test.ts",
+    "start:configured": "node --env-file=.env.local --experimental-strip-types src/server.ts",
+    "test:full": "node --experimental-strip-types --test test/*.test.ts tools/__tests__/*.test.ts",
+    "verify:release": "node --env-file=.env.local --experimental-transform-types test/api-public-demo.ts"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  }
+}

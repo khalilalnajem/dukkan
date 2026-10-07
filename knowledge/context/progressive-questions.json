@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "policy": "Ask at most three relevant unanswered questions per turn. now means relevant to this pilot, not universal onboarding. Do not collect real IDs, dates of birth or full addresses initially. A conditional question requires a cited applicable condition, not just a retrieved keyword.",
+  "questions": [
+    {
+      "id": "Q01",
+      "field": "business.activity",
+      "question": "Describe the deliverables and any sales, printing, advertising or regulated professional work.",
+      "askWhen": "now",
+      "reason": "Defines what must be classified.",
+      "answer": null
+    },
+    {
+      "id": "Q02",
+      "field": "business.legalForm",
+      "question": "What legal form is recorded, and is incorporation complete or only planned?",
+      "askWhen": "now",
+      "reason": "Do not route incorporation as first licensing.",
+      "answer": null
+    },
+    {
+      "id": "Q03",
+      "field": "founder.role",
+      "question": "Are you the owner, manager or representative for this request?",
+      "askWhen": "now",
+      "reason": "Separates founder, owner and applicant.",
+      "answer": null
+    },
+    {
+      "id": "Q04",
+      "field": "owner.type",
+      "question": "Is the owner a person or an organisation?",
+      "askWhen": "route_review",
+      "reason": "Ownership conditions may differ.",
+      "answer": null
+    },
+    {
+      "id": "Q05",
+      "field": "owner.nationality",
+      "question": "Which nationality category applies to the owner?",
+      "askWhen": "only_if_source_condition_requires",
+      "reason": "No civil ID or passport is needed for routing.",
+      "answer": null
+    },
+    {
+      "id": "Q06",
+      "field": "owner.residency",
+      "question": "Does the owner have the residency status required by the verified route?",
+      "askWhen": "only_if_source_condition_requires",
+      "reason": "Ask status, not an identity document.",
+      "answer": null
+    },
+    {
+      "id": "Q07",
+      "field": "business.activityCode",
+      "question": "Has MOCI confirmed an activity code for these deliverables?",
+      "askWhen": "route_review",
+      "reason": "Never infer the code from the business name.",
+      "answer": null
+    },
+    {
+      "id": "Q08",
+      "field": "premises.type",
+      "question": "What type of premises is proposed?",
+      "askWhen": "after_activity_route",
+      "reason": "Do not assume home, micro-business or professional routes.",
+      "answer": null
+    },
+    {
+      "id": "Q09",
+      "field": "premises.unit",
+      "question": "Intake says Unit 21 and the synthetic lease scenario says Unit 12. Which is correct?",
+      "askWhen": "after_document_extract",
+      "reason": "Keep both evidence locations and founder correction.",
+      "answer": null
+    },
+    {
+      "id": "Q10",
+      "field": "founder.age",
+      "question": "Do you meet the verified age condition, if one applies?",
+      "askWhen": "only_if_source_condition_requires",
+      "reason": "Use eligibility answer or age band before exact birth date.",
+      "answer": null
+    },
+    {
+      "id": "Q11",
+      "field": "founder.employment",
+      "question": "Does an applicable employment restriction affect the relevant owner or manager?",
+      "askWhen": "only_if_source_condition_requires",
+      "reason": "Do not assume founder and manager are the same person.",
+      "answer": null
+    },
+    {
+      "id": "Q12",
+      "field": "applicant.authorityToAct",
+      "question": "Who would review the draft and act as authorised applicant?",
+      "askWhen": "before_any_future_action",
+      "reason": "A source can identify requirements but cannot authorise an action.",
+      "answer": null
+    },
+    {
+      "id": "Q13",
+      "field": "costs.officialFees",
+      "question": "Which current official fee schedule covers the confirmed route?",
+      "askWhen": "after_activity_route",
+      "reason": "Unknown fees stay null; estimates remain labelled.",
+      "answer": null
+    }
+  ]
+}

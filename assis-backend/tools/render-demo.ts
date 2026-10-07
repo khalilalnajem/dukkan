@@ -1,0 +1,21 @@
+/** Reproducible synthetic-only artefact generator. No job/model/API/transaction execution. */
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { hash } from '../contracts/index.ts';
+import type { CaseSnapshot, ToolContext } from '../contracts/index.ts';
+import { retrieveGuidance, inspectDocuments, confirmUnitCorrection, assemblePack } from './index.ts';
+const root=fileURLToPath(new URL('../data/fixtures/',import.meta.url));
+const output=fileURLToPath(new URL('../data/demo-output/',import.meta.url));
+const intake=JSON.parse(await readFile(join(root,'synthetic-intake.json'),'utf8'));
+const bytes=await readFile(join(root,'synthetic-lease.pdf'));
+const caseSnapshot:CaseSnapshot={schemaVersion:1,businessId:intake.businessId,businessRevision:1,facts:intake.facts,factsHash:hash(intake.facts),documentVersionIds:['synthetic-lease-v1'],corrections:[]};
+const context:ToolContext={privateRoot:root,outputDir:output,caseSnapshot,job:{jobId:'synthetic-render-before',businessId:intake.businessId,executionMode:'deterministic'},documents:[{id:'synthetic-lease-v1',businessId:intake.businessId,name:'synthetic-lease.pdf',mime:'application/pdf',bytes:bytes.length,contentHash:hash(bytes),storageKey:join(root,'synthetic-lease.pdf'),expiresAt:new Date(Date.now()+3600000).toISOString(),extractionStatus:'pending'}],previousResults:{},signal:new AbortController().signal};
+const guidance=await retrieveGuidance();const initial=await inspectDocuments(context);
+const correction=JSON.parse(await readFile(join(root,'synthetic-correction.json'),'utf8')).facts[0];
+const successor=confirmUnitCorrection(caseSnapshot,correction,initial.checks[0].observed!);
+const final=await inspectDocuments({...context,caseSnapshot:successor.caseSnapshot});
+const pack=assemblePack({caseSnapshot:successor.caseSnapshot,guidance,inspection:final,jobId:'synthetic-render-corrected',executionMode:'deterministic'});
+await mkdir(output,{recursive:true});
+await Promise.all([writeFile(join(output,'preparation.html'),pack.html),writeFile(join(output,'preparation.md'),pack.markdown),writeFile(join(output,'preparation.json'),pack.json),writeFile(join(output,'verification.json'),JSON.stringify({synthetic:true,initialCheck:initial.checks[0].state,correctedCheck:final.checks[0].state,readiness:pack.readiness,htmlHash:hash(pack.html),canonicalBodyHash:pack.hash,sourceVersionIds:pack.sources.map(s=>s.versionId)},null,2)+'\n')]);
+console.log('Synthetic HTML/Markdown/JSON generated under data/demo-output; readiness blocked.');

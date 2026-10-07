@@ -1,0 +1,15 @@
+{
+  "context/generated/corpus.json": "9546148e4e2af09abe7d0497c4719a42b28a9b5df27a4ebc3a2b14f4bf504874",
+  "context/tools/corpus.py": "d2a8fe6677c0c73573dded4bc353310da977c362b6d9bc2494b81dd3d5557606",
+  "context/bilingual-aliases.json": "a1e52400940b3affe170799eb24926372a99e47d2bc4861894501c337fe97e0a",
+  "actions/manifest.json": "9e978a669c114ceacafa3702d3414eb4adc6e81fb73bd1d048dcef3aaa51a202",
+  "actions/sha256-index.json": "9d9c360d31b7fc573cb0849221d00ebc943b23e0ba716d82e816b0007aee5ef4",
+  "actions/contacts.json": "cd6eb828e6d3e25a8f5a1d0ed21a90d66a86df29bf1ec504afbacc198551656d",
+  "actions/playbooks/ACT-A01.json": "e5ee2c2ea295d215843b29683fec43c18791886d11253a6abc31cf1f4a9896ba",
+  "actions/playbooks/ACT-A02.json": "7ef89cf6e75c0d298c6bd9c51e41ef29a80d5737d4357de76cdab048dc0332d5",
+  "actions/templates/route-clarification.json": "279176f6126a758e0bd0c00a48e4e14a8aa0b459d7b738fc3363d99055d2a196",
+  "actions/templates/missing-document.json": "0b4fb37a455e90e5c10cda23906c124c24c1d76453009d2f42b1f6f219f7f70d",
+  "actions/forms/madar-preparation-worksheet.json": "95f90eb9b6dc68be5458f132255a25fcac076b03b81d07ee421b3f189feeda0c",
+  "actions/forms/observed-forms.json": "2190b98864bcf1205223a0d9200e13a7950c92eef0cb8572818b32cec9322850",
+  "context/progressive-questions.json": "de36e3c68afaa5c4bd6b977e9bf50b7297d4f8ea1e58c897646601f284f11568"
+}
