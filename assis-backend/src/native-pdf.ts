@@ -8,7 +8,7 @@ export const pdfDescription='Fill actual KDIPA Application B PDF AcroForm fields
 export function pdfTemplate(){return JSON.parse(readFileSync(new URL('form-manifest.json',assets),'utf8'));}
 export const pdfSchema={type:'object',properties:{templateId:{type:'string',enum:['pearl-delta-official-form']},fields:{type:'object',properties:Object.fromEntries(pdfTemplate().fields.map((f:any)=>[f.fieldName,{type:'string',description:f.label}])),additionalProperties:false},expectedHash:{type:'string'},recreate:{type:'boolean',description:'Explicitly recreate from supplied fields after case facts change; discard earlier values.'}},required:['templateId','fields'],additionalProperties:false};
 const digest=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
-export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:string,assertCurrent:()=>void,onField:(field:string,value:string,page:number)=>void|Promise<void>){
+export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:string,assertCurrent:()=>void,onField:(field:string,value:string,page:number,progress:{snapshotId:string;hash:string;bytes:Buffer;sequence:number})=>void|Promise<void>){
  const template=pdfTemplate();
  ensure(args.templateId===template.id,'UNKNOWN_TEMPLATE','Choose the supported official PDF template');
  ensure(args.fields&&typeof args.fields==='object'&&!Array.isArray(args.fields)&&Object.keys(args.fields).length>0,'INVALID_PDF_FIELDS','Supply at least one field');
@@ -22,16 +22,33 @@ export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:stri
   ensure(allowed.has(key)&&typeof value==='string'&&value.length<=500&&/^[\x20-\x7E]*$/.test(value),'INVALID_PDF_FIELDS','Only supported text fields with up to 500 Latin characters can be filled. Other writing systems need font support.');
   ensure(value===''||sourceText.includes(value as string)||(/demo|fictional|example/i.test(sourceText)&&value===allowed.get(key).value),'UNSUPPORTED_PDF_VALUE','Copy supplied user text exactly; unknown values must remain blank');
  }
- const bytes=readFileSync(new URL('Application-B-original.pdf',assets));
+ const bytes=readFileSync(new URL('Application-B-original.pdf',assets)),progressStorageLimit=bytes.length*16;
  ensure(digest(bytes)===template.templateSha256,'TEMPLATE_CHANGED','Official template hash changed; review its mapping first',409);
  const pdf=await PDFDocument.load(bytes);const form=pdf.getForm();const font=await pdf.embedFont(StandardFonts.Helvetica);
  const fields={...(!args.recreate?previous?.fields||{}:{}),...args.fields};
- for(const [key,value] of Object.entries(fields)){
+ const carried=Object.fromEntries(Object.entries(fields).filter(([key])=>!Object.hasOwn(args.fields,key)));
+ for(const [key,value] of Object.entries(carried)){
   assertCurrent();form.getTextField(key).setText(String(value));form.getTextField(key).setFontSize(9);
-  if(Object.hasOwn(args.fields,key))await onField(key,String(value),allowed.get(key).page);
  }
  form.updateFieldAppearances(font);
  for(const page of pdf.getPages())page.drawText('DEMONSTRATION - FICTIONAL COMPANY - NOT SUBMITTED',{x:28,y:10,size:8,font,color:rgb(.55,.1,.1)});
+ let sequence=0;
+ for(const [key,value] of Object.entries(args.fields)){
+  assertCurrent();form.getTextField(key).setText(String(value));form.getTextField(key).setFontSize(9);form.updateFieldAppearances(font);sequence++;
+  const output=Buffer.from(await pdf.save());assertCurrent();
+  ensure(output.length<=bytes.length*2,'PDF_PROGRESS_TOO_LARGE','PDF progress snapshot exceeds the template size allowance',413);
+  const hash=digest(output),snapshotId=randomUUID();
+  const snapshot={turnId:t.id,conversationId:t.conversationId,caseId:t.caseId,business:t.caseId,workspaceId:store.get('conversation',t.conversationId)?.workspaceId||'legacy',snapshotId,sequence,hash,bytes:output.length,pdfBase64:output.toString('base64'),createdAt:new Date().toISOString()};
+  store.put('chat_pdf_progress',`${t.id}:${sequence}`,t.caseId,snapshot);
+  const snapshots=store.ordered('chat_pdf_progress',t.caseId).filter(item=>item.turnId===t.id);
+  let total=snapshots.reduce((sum,item)=>sum+item.bytes,0);
+  for(const old of snapshots){if(snapshots.length-(snapshots.indexOf(old))<=16&&total<=progressStorageLimit)break;store.db.prepare('DELETE FROM records WHERE kind=? AND id=? AND business=?').run('chat_pdf_progress',`${t.id}:${old.sequence}`,t.caseId);total-=old.bytes;}
+  const caseSnapshots=store.ordered('chat_pdf_progress',t.caseId);total=caseSnapshots.reduce((sum,item)=>sum+item.bytes,0);
+  const caseLimit=64*1024*1024,olderSnapshots=caseSnapshots.filter(item=>item.turnId!==t.id).sort((a,b)=>String(a.createdAt||'').localeCompare(String(b.createdAt||''))||(a.sequence||0)-(b.sequence||0)||String(a.turnId).localeCompare(String(b.turnId)));
+  for(const old of olderSnapshots){if(total<=caseLimit)break;store.db.prepare('DELETE FROM records WHERE kind=? AND id=? AND business=?').run('chat_pdf_progress',`${old.turnId}:${old.sequence}`,t.caseId);total-=old.bytes;}
+  ensure(total<=caseLimit,'PDF_PROGRESS_STORAGE_LIMIT','PDF progress snapshots exceed the case storage limit',413);
+  await onField(key,String(value),allowed.get(key).page,{snapshotId,hash,bytes:output,sequence});
+ }
  const output=await pdf.save();assertCurrent();
  ensure((latest()?.hash||null)===(previous?.hash||null),'STALE_ARTIFACT','Another PDF revision was saved; reopen the latest version',409);
  const id=randomUUID(),hash=digest(output);

@@ -59,11 +59,16 @@
 .chat-compose-wrap {width:min(816px,100%);padding:14px 28px 22px;margin:0 auto;flex-shrink:0;background:#fdfcf9}
 .chat-composer {background:#fff;border:1px solid #d6d8cf;border-radius:18px;padding:16px;box-shadow:0 3px 12px #2c311c05}
 .chat-composer:focus-within {border-color:#99765a;box-shadow:0 0 0 2px #b78e6920}
-.chat-composer textarea {display:block;resize:none;border:none;outline:none;background:transparent;box-shadow:none;width:100%;font-size:15px;line-height:1.65;min-height:62px;color:#27302b}
-.chat-compose-actions {display:flex;align-items:center;justify-content:space-between;gap:14px}
+.chat-composer textarea {display:block;resize:none;border:none;outline:none;background:transparent;box-shadow:none;width:100%;min-width:0;min-height:52px;max-height:9em;overflow-y:hidden;padding:4px 2px 12px;font:inherit;font-size:15px;line-height:1.5;color:#27302b}
+.chat-compose-actions {display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:8px;min-width:0}
 .chat-compose-actions select {background:transparent;border:0;font-size:11px;color:#7c8178;max-width:min(370px,58vw)}
 .chat-compose-actions button {border-radius:11px;background:#273a30;color:#fff}
 .chat-compose-actions button:disabled {opacity:.4}
+.agent-ui .chat-composer textarea{height:auto;min-height:52px;max-height:9em;padding:4px 2px 12px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.agent-ui .chat-compose-actions{border-top:1px solid #edf0eb;padding-top:9px}
+.agent-ui .chat-compose-actions>button[type=submit]{margin-inline-start:auto}
+.chat-compose-actions .composer-settings>summary,.chat-compose-actions .chat-documents>button{flex:0 0 36px}
+.chat-compose-actions .composer-settings:focus-within,.chat-compose-actions .chat-documents:focus-within{z-index:31}
 .chat-disclosure {font-size:10px;line-height:1.5;text-align:center;color:#898d86;margin:11px 5px 0}
 .chat-error {display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 14px;background:#fff4f2;border:1px solid #ebc7c2;border-radius:10px;margin-bottom:12px;font-size:12px;color:#8b3838}
 .chat-files {max-width:740px;width:100%;margin:0 auto;padding:50px 28px;flex:1;min-height:0;overflow:auto}
@@ -276,8 +281,9 @@
 .agent-workspace .conversation-choice-saved small{color:#627167;line-height:1.45}
 @media(max-width:560px){.agent-workspace .conversation-option-row{grid-template-columns:minmax(0,1fr) 104px;gap:5px}.agent-workspace .conversation-option-detail>summary{padding-inline:2px;font-size:9px}.agent-workspace .conversation-custom-option{grid-template-columns:1fr}.agent-workspace .conversation-custom-option label:last-child{grid-column:auto}.agent-workspace .conversation-score>strong{font-size:20px}.agent-ui .chat-compose-wrap{padding-inline:12px}.agent-ui .chat-composer{padding:10px}.agent-ui .chat-compose-actions{gap:6px}}
 
-/* Anchor menus to the composer row so they stay inside narrow and RTL chats. */
+/* Anchor menus to the composer edges and constrain them to the available view. */
 .chat-compose-actions{position:relative}
 .chat-compose-actions .composer-settings,.chat-compose-actions .chat-documents{position:static}
-.chat-compose-actions .composer-settings>div{inset-inline-start:0;inset-inline-end:auto;width:min(330px,100%)}
-.chat-compose-actions .chat-documents section{inset-inline-start:0;inset-inline-end:auto;width:min(360px,100%)}
+.chat-compose-actions .composer-settings>div{inset-inline-start:auto;inset-inline-end:0;width:min(330px,calc(100vw - 32px))}
+.chat-compose-actions .chat-documents section{inset-inline-start:0;inset-inline-end:auto;width:min(360px,calc(100vw - 32px))}
+@media(max-width:420px){.agent-ui .chat-compose-wrap{padding-inline:10px}.agent-ui .chat-composer{padding:9px;border-radius:13px}.agent-ui .chat-compose-actions{gap:6px}.agent-ui .chat-compose-actions .chat-documents>button,.agent-ui .chat-compose-actions .composer-settings>summary,.agent-ui .chat-compose-actions>button[type=submit]{width:34px;height:34px;flex-basis:34px}}

@@ -49,7 +49,7 @@ export function GuidePage({language,demo,hasIdea,onNavigate,onAsk,onOpenExample,
   if(!ready){onNewIdea();return}
   if(action.kind==='ask')onAsk(action.prompt,action.intent);else onNavigate(action.page)
  }
- return <main className="dukkan-guide" lang={language}>
+ return <main className="dukkan-guide" lang={language} dir={language==='ar'?'rtl':'ltr'}>
   <header className="dukkan-guide-intro">
    <span className="dukkan-kicker">{t.kicker}</span>
    <h1>{t.title}</h1>

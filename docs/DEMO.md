@@ -40,3 +40,10 @@ The fixed ten-query local-corpus evaluation used one model/configuration and one
 The 20 provider calls reported an estimated USD 0.0234432 from token use. Q1 ran before the reservation cap was enabled; Q2–Q10 ran with it enabled. The combined estimate was below USD 0.50. Reservations persist and are checked before requests, without automatic retries or a success fallback. Full private answers and corpus excerpts are not distributed.
 
 All thirteen future-phase designs are rendered by the app's own components and design system. Crowdfunding includes campaign, readiness and provider-handoff concepts. MOCI, Sahel and Sahel Business marks link to official information and denote planned destinations, with no connected-service or partnership claim. No funds move and no government handoff occurs. The narrated recording uses a disclosed AI-generated English voice and Arabic subtitles. Its media remains a local deliverable rather than a public repository upload.
+
+
+## Live document updates and interface corrections, 7 October 2026
+
+The document panel now displays the actual PDF saved after each field update, with byte-count and SHA-256 checks before rendering. The live browser check filled seven supplied sample values across pages two, three and four, retained earlier values, and left signatures and identity numbers blank. The final PDF remained visible and opened for review. Temporary previews are bounded to 16 per turn and 64 MiB per case; final document versions remain separate.
+
+The opt-in Kuwait service example populates all business sections. Its three-client scenario uses KWD 90 per client, KWD 15 variable cost and KWD 120 fixed cost, giving KWD 105 after modelled costs. These are illustrative assumptions, not revenue or research findings. English and Arabic interfaces were checked at desktop and 390-pixel widths, including menu dismissal, multiline typing, navigation, document panels and keyboard-operated crowdfunding tabs. Official government destinations remain planned integrations.

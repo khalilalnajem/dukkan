@@ -43,6 +43,57 @@ test('native chat saves PDF events and immutable human revision with review hash
  }finally{app.store.close();rmSync(root,{recursive:true,force:true});}
 });
 
+test('live PDF progress serves each real scoped AcroForm snapshot with exact hash',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'dukkan-pdf-progress-'));
+ const app=await createApp({privateRoot:root,chatModel:{name:'test',version:'stub',respond:async({messages}:any)=>messages.at(-1).role==='user'?({content:'',calls:[{name:'fill_official_pdf',arguments:{templateId:'pearl-delta-official-form',fields:{Name:'Pearl Delta - fictional',Nationality:'China'}}}],usage:{}}):({content:'The fictional PDF draft is prepared for review.',calls:[],usage:{}})}});
+ try{
+  const conversation=app.chat.create({workspaceId:'idea-a',title:'PDF progress'}).conversation;app.chat.create({workspaceId:'idea-b',title:'Other idea'});
+  const queued=app.chat.enqueue(conversation.id,{content:'Fill Pearl Delta - fictional; nationality China',executionMode:'live_agent'});
+  let settled:any;for(let i=0;i<300;i++){settled=app.chat.turnSnapshot(queued.turn.id);if(!['queued','running'].includes(settled.turn.status))break;await new Promise(resolve=>setTimeout(resolve,10));}
+  assert.equal(settled.turn.status,'completed',JSON.stringify(settled.turn.error));
+  const events=settled.turn.events.filter((event:any)=>event.type==='pdf_field_updated');assert.equal(events.length,2);
+  const read=(event:any)=>{const result=event.result,path=new URL(result.previewUrl,'http://local.test');const snapshotId=path.pathname.split('/').at(-1)!;return app.chat.pdfProgress(queued.turn.id,snapshotId,path.searchParams.get('workspaceId')!,path.searchParams.get('hash')!);};
+  const first=read(events[0]);assert.ok(first.subarray(0,5).equals(Buffer.from('%PDF-')));
+  const firstPdf=await PDFDocument.load(first);assert.equal(firstPdf.getForm().getTextField('Name').getText(),'Pearl Delta - fictional');assert.equal(firstPdf.getForm().getTextField('Nationality').getText()||'','');
+  const second=read(events[1]);const secondPdf=await PDFDocument.load(second);assert.equal(secondPdf.getForm().getTextField('Nationality').getText(),'China');assert.notDeepEqual(first,second);
+  const firstUrl=new URL(events[0].result.previewUrl,'http://local.test');const snapshotId=firstUrl.pathname.split('/').at(-1)!;
+  assert.throws(()=>app.chat.pdfProgress(queued.turn.id,snapshotId,'idea-b',firstUrl.searchParams.get('hash')!),{code:'WORKSPACE_MISMATCH'});
+  assert.throws(()=>app.chat.pdfProgress(queued.turn.id,snapshotId,'idea-a','0'.repeat(64)),{code:'PDF_PROGRESS_HASH_MISMATCH'});
+  assert.ok(app.store.all('chat_pdf_progress',conversation.caseId).length<=16);
+ }finally{app.store.close();rmSync(root,{recursive:true,force:true});}
+});
+
+test('revision progress bytes retain unchanged fields from the reviewed predecessor',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'dukkan-pdf-revision-progress-'));const store=new Store(root);
+ try{
+  const base={caseId:'revision-case',conversationId:'revision-chat',businessRevision:1,factsHash:'facts'};
+  const first=await fillOfficialPdf(store,{...base,id:'revision-turn-1'},{templateId:'pearl-delta-official-form',fields:{Name:'Pearl Delta - fictional',Nationality:'China'}},'Pearl Delta - fictional China',()=>{},()=>{});
+  let progress:Buffer|undefined;
+  await fillOfficialPdf(store,{...base,id:'revision-turn-2'},{templateId:'pearl-delta-official-form',expectedHash:first.hash,fields:{Name:'Pearl Delta revised - fictional'}},'Pearl Delta revised - fictional',()=>{},(_field,_value,_page,snapshot)=>{progress=snapshot.bytes});
+  assert.ok(progress);const pdf=await PDFDocument.load(progress);assert.equal(pdf.getForm().getTextField('Name').getText(),'Pearl Delta revised - fictional');assert.equal(pdf.getForm().getTextField('Nationality').getText(),'China');
+ }finally{store.close();rmSync(root,{recursive:true,force:true});}
+});
+
+test('case progress storage prunes oldest prior snapshots without changing saved PDF artifacts',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'dukkan-pdf-case-progress-'));const app=await createApp({privateRoot:root});
+ try{
+  const conversation=app.chat.create({workspaceId:'idea-retained',title:'Case progress retention'}).conversation;
+  const caseRecord=app.store.get('case',conversation.caseId),base={caseId:conversation.caseId,conversationId:conversation.id,businessRevision:caseRecord.businessRevision,factsHash:caseRecord.factsHash};
+  const priorTurn={...base,id:'older-pdf-turn',status:'completed'};app.store.put('chat_turn',priorTurn.id,priorTurn.caseId,priorTurn);
+  let oldSnapshot:any;
+  const first=await fillOfficialPdf(app.store,priorTurn,{templateId:'pearl-delta-official-form',fields:{Name:'Pearl Delta - fictional'}},'Pearl Delta - fictional',()=>{},(_field,_value,_page,snapshot)=>{oldSnapshot=snapshot});
+  const oldKey=`${priorTurn.id}:1`,oldRow=app.store.get('chat_pdf_progress',oldKey);oldRow.bytes=64*1024*1024;oldRow.createdAt='2000-01-01T00:00:00.000Z';app.store.put('chat_pdf_progress',oldKey,conversation.caseId,oldRow);
+  const currentTurn={...base,id:'current-pdf-turn',status:'running'};app.store.put('chat_turn',currentTurn.id,currentTurn.caseId,currentTurn);
+  const next=await fillOfficialPdf(app.store,currentTurn,{templateId:'pearl-delta-official-form',expectedHash:first.hash,fields:{Name:'Pearl Delta revised - fictional'}},'Pearl Delta revised - fictional',()=>{},()=>{});
+  assert.equal(app.store.get('chat_pdf_progress',oldKey),null);
+  assert.throws(()=>app.chat.pdfProgress(priorTurn.id,oldSnapshot.snapshotId,'idea-retained',oldSnapshot.hash),{code:'NOT_FOUND'});
+  const remaining=app.store.all('chat_pdf_progress',conversation.caseId);assert.ok(remaining.some(item=>item.turnId===currentTurn.id));
+  assert.ok(remaining.reduce((sum,item)=>sum+item.bytes,0)<=64*1024*1024);
+  assert.equal(app.store.get('chat_artifact',first.id).hash,first.hash);assert.equal(app.store.get('chat_artifact',next.id).hash,next.hash);
+  app.chat.currentArtifact(app.chat.artifact(first.id));app.chat.currentArtifact(app.chat.artifact(next.id));
+ }finally{app.store.close();rmSync(root,{recursive:true,force:true});}
+});
+
 test('complete synthetic company fills every supported mapped field',async()=>{
  const root=mkdtempSync(join(tmpdir(),'dukkan-pdf-complete-'));const store=new Store(root);
  try{

@@ -3,8 +3,8 @@ import {PDFDocument} from 'pdf-lib'
 import {GlobalWorkerOptions,getDocument,type PDFDocumentProxy} from 'pdfjs-dist'
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import {Pause,Play,RotateCcw} from 'lucide-react'
-import {verifiedPreview,type ChatArtifact} from '../lib/chat-api'
-import {preparePdfFillPlayback,pdfFillPlaybackValuesAt,prepareLivePdfFillPreview,type PdfFillArtifact,type PdfFieldUpdate,type PdfTemplateManifest,type PdfFillPlayback} from './pdf-fill-playback-model'
+import {verifiedPreview,verifiedPdfProgress,type PdfProgressPreview,type ChatArtifact} from '../lib/chat-api'
+import {preparePdfFillPlayback,pdfFillPlaybackValuesAt,type PdfFillArtifact,type PdfFieldUpdate,type PdfTemplateManifest,type PdfFillPlayback} from './pdf-fill-playback-model'
 import './pdf-fill-playback.css'
 
 GlobalWorkerOptions.workerSrc=workerUrl
@@ -56,43 +56,37 @@ async function loadPlayback(artifact:ChatArtifact,progress:PdfFieldUpdate[],sign
  return {timeline,originalBytes}
 }
 
-export function LivePdfFillPreview({progress,language='en'}:{progress:PdfFieldUpdate[];language:'en'|'ar'}){
- const ar=language==='ar',canvas=useRef<HTMLCanvasElement>(null),[manifest,setManifest]=useState<PdfTemplateManifest|null>(null),[originalBytes,setOriginalBytes]=useState<Uint8Array|null>(null),[templateHash,setTemplateHash]=useState(''),[timeline,setTimeline]=useState<ReturnType<typeof prepareLivePdfFillPreview>|null>(null),[pdf,setPdf]=useState<PDFDocumentProxy|null>(null),[page,setPage]=useState(1),[width,setWidth]=useState(600),[error,setError]=useState('')
+export function LivePdfFillPreview({progress,preview,turnId,scope,language='en'}:{progress:PdfFieldUpdate[];preview?:PdfProgressPreview;turnId:string;scope:string;language:'en'|'ar'}){
+ const ar=language==='ar',canvas=useRef<HTMLCanvasElement>(null),[pdf,setPdf]=useState<PDFDocumentProxy|null>(null),[page,setPage]=useState(1),[width,setWidth]=useState(600),[error,setError]=useState(''),[fitPage,setFitPage]=useState(false)
+ const latest=progress.at(-1)
  useEffect(()=>{
-  const controller=new AbortController();let disposed=false
-  setManifest(null);setOriginalBytes(null);setTemplateHash('');setPdf(null);setTimeline(null);setError('')
-  void loadOriginalTemplate(controller.signal).then(result=>{if(!disposed){setManifest(result.manifest);setOriginalBytes(result.originalBytes);setTemplateHash(result.templateHash)}}).catch(()=>{if(!disposed)setError(ar?'تعذر التحقق من النموذج الأصلي.':'The original template could not be verified.')})
-  return()=>{disposed=true;controller.abort()}
- },[ar])
- useEffect(()=>{
-  if(!manifest||!templateHash)return
-  try{const next=prepareLivePdfFillPreview(manifest,progress,templateHash);setTimeline(next);setError('');if(next.updates.length)setPage(next.updates[next.updates.length-1].page)}
-  catch{setTimeline(null);setError(ar?'تحديث الحقل لا يطابق النموذج الأصلي.':'A field update does not match the verified original template.')}
- },[manifest,progress,templateHash,ar])
- useEffect(()=>{if(!manifest||!originalBytes||!timeline)return;let cancelled=false,task:ReturnType<typeof getDocument>|undefined
-  void (async()=>{try{
-   const document=await PDFDocument.load(originalBytes),form=document.getForm(),font=await document.embedFont('Helvetica')
-   for(const [name,value] of Object.entries(timeline.fieldValues))form.getTextField(name).setText(value)
-   form.updateFieldAppearances(font)
-   const bytes=await document.save();if(cancelled)return
-   task=getDocument({data:bytes});const rendered=await task.promise;if(!cancelled){setPdf(rendered);setPage(timeline.updates.at(-1)?.page??1)}
-  }catch{if(!cancelled)setError(ar?'تعذر عرض معاينة الحقول الحالية.':'The current field updates could not be previewed.')}
-  })()
-  return()=>{cancelled=true;void task?.destroy()}
- },[manifest,originalBytes,timeline,ar])
- useEffect(()=>{const element=canvas.current?.parentElement;if(!element)return;const observer=new ResizeObserver(()=>setWidth(element.clientWidth));observer.observe(element);setWidth(element.clientWidth);return()=>observer.disconnect()},[manifest])
+  if(!preview)return
+  const controller=new AbortController();let disposed=false,task:ReturnType<typeof getDocument>|undefined
+  void verifiedPdfProgress(preview,turnId,scope,controller.signal).then(async bytes=>{
+   if(disposed)return;task=getDocument({data:bytes});const document=await task.promise
+   if(!disposed){setPdf(document);setPage(Math.min(preview.page,document.numPages));setError('')}
+  }).catch(()=>{if(!disposed)setError(ar?'تعذر التحقق من معاينة المستند المحفوظة.':'The saved document preview could not be verified.')})
+  return()=>{disposed=true;controller.abort();void task?.destroy()}
+ },[preview?.hash,turnId,scope,ar])
+ useEffect(()=>{const element=canvas.current?.parentElement;if(!element)return;const observer=new ResizeObserver(()=>setWidth(element.clientWidth));observer.observe(element);setWidth(element.clientWidth);return()=>observer.disconnect()},[!!pdf])
  useEffect(()=>{if(!pdf||!canvas.current)return;let cancelled=false,render:ReturnType<Awaited<ReturnType<PDFDocumentProxy['getPage']>>['render']>|undefined
-  void pdf.getPage(page).then(pdfPage=>{if(cancelled||!canvas.current)return;const viewport=pdfPage.getViewport({scale:Math.max(.2,Math.min(1.5,(width-20)/pdfPage.getViewport({scale:1}).width,(window.innerHeight*.42-36)/pdfPage.getViewport({scale:1}).height))}),element=canvas.current;element.width=viewport.width;element.height=viewport.height;render=pdfPage.render({canvas:element,viewport});return render.promise}).catch(()=>{if(!cancelled)setError(ar?'تعذر عرض معاينة الحقول الحالية.':'The current field updates could not be previewed.')})
+  void pdf.getPage(page).then(async pdfPage=>{
+   if(cancelled||!canvas.current)return
+   const original=pdfPage.getViewport({scale:1}),scale=Math.max(.2,Math.min(1.6,(width-20)/original.width,fitPage?(window.innerHeight*.57-30)/original.height:Infinity)),viewport=pdfPage.getViewport({scale}),element=canvas.current
+   element.width=viewport.width;element.height=viewport.height;render=pdfPage.render({canvas:element,viewport});await render.promise
+   if(cancelled)return
+   const fields=await pdfPage.getAnnotations(),field=fields.find(item=>item.fieldValue===latest?.value)
+   if(field?.rect&&!fitPage&&element.parentElement){const [,b,,d,,f]=viewport.transform;const y1=b*field.rect[0]+d*field.rect[1]+f,y2=b*field.rect[2]+d*field.rect[3]+f;element.parentElement.scrollTop=Math.max(0,Math.min(y1,y2)-110)}
+  }).catch(()=>{if(!cancelled)setError(ar?'تعذر عرض صفحة المستند.':'The document page could not be displayed.')})
   return()=>{cancelled=true;render?.cancel()}
- },[pdf,page,width,ar])
- const latest=timeline?.updates.at(-1)
+ },[pdf,page,width,fitPage,ar])
  return <section className="pdf-fill-playback pdf-fill-live" aria-label={ar?'معاينة المستند المباشرة':'Live document preview'}>
-  <header><div><h3>{ar?'معاينة المستند المباشرة':'Live document preview'}</h3><p>{ar?'تظهر هنا الحقول التي وصل تحديثها فقط؛ راجع ملف PDF بعد اكتماله.':'Only reported field updates are shown; review the completed PDF.'}</p></div></header>
-  {error?<p className="pdf-playback-error" role="alert">{error}</p>:!manifest||!pdf?<p role="status">{ar?'جارٍ التحقق من النموذج وعرض التحديثات…':'Verifying the template and rendering updates…'}</p>:<>
-   <div className="pdf-playback-current" aria-live="polite">{latest?<><strong>{latest.label}</strong><span dir="auto">{latest.value|| (ar?'فارغ':'Blank')}</span><small>{ar?`صفحة ${latest.page}`:`Page ${latest.page}`}</small></>:<span>{ar?'في انتظار أول تحديث محفوظ للحقل.':'Waiting for the first recorded field update.'}</span>}</div>
-   <div className="pdf-playback-controls">{Array.from(new Set(timeline?.updates.map(update=>update.page)??[1])).map(pageNumber=><button key={pageNumber} aria-pressed={page===pageNumber} onClick={()=>setPage(pageNumber)}>{ar?`صفحة ${pageNumber}`:`Page ${pageNumber}`}</button>)}</div>
-   <div className="pdf-playback-page"><p>{ar?`صفحة ${page} من ${pdf.numPages}`:`Page ${page} of ${pdf.numPages}`}</p><canvas ref={canvas} aria-label={`${ar?'معاينة المستند المباشرة':'Live document preview'}, page ${page}`}/></div>
-  </>}
+  <header><div><h3>{ar?'المستند أثناء التعبئة':'Document being filled'}</h3><p>{ar?'نسخة PDF محفوظة ومتحقق منها بعد كل تحديث للحقل.':'A verified PDF saved after each field update.'}</p></div></header>
+  {latest&&<div className="pdf-playback-current" aria-live="polite"><strong>{latest.name}</strong><span dir="auto">{latest.value|| (ar?'فارغ':'Blank')}</span><small>{ar?`صفحة ${latest.page}`:`Page ${latest.page}`}</small></div>}
+  <div className="pdf-playback-controls"><button aria-pressed={!fitPage} onClick={()=>setFitPage(false)}>{ar?'ملاءمة العرض':'Fit width'}</button><button aria-pressed={fitPage} onClick={()=>setFitPage(true)}>{ar?'الصفحة كاملة':'Fit page'}</button>{pdf&&<span>{ar?`صفحة ${page} من ${pdf.numPages}`:`Page ${page} of ${pdf.numPages}`}</span>}</div>
+  {error&&<p className="pdf-playback-error" role="alert">{error}</p>}
+  {!pdf&&<p role="status">{ar?'بانتظار أول حقل محفوظ…':'Waiting for the first saved field…'}</p>}
+  <div className="pdf-playback-page" hidden={!pdf}><canvas ref={canvas} aria-label={`${ar?'معاينة المستند المباشرة':'Live document preview'}, page ${page}`}/></div>
  </section>
 }
 

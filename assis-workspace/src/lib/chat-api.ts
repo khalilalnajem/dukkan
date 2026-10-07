@@ -67,3 +67,16 @@ export async function verifiedPreview(artifact:ChatArtifact,signal:AbortSignal){
  if(digest!==artifact.hash)throw new Error('The document failed verification. Reopen its saved version.')
  return new Blob([bytes],{type:artifact.kind==='official_pdf'||artifact.format==='pdf'?'application/pdf':'text/html'})
 }
+
+export type PdfProgressPreview={previewUrl:string;hash:string;bytes:number;page:number;sequence:number}
+export async function verifiedPdfProgress(preview:PdfProgressPreview,turnId:string,scope:string,signal:AbortSignal){
+ const url=new URL(preview.previewUrl,API),base=new URL(API)
+ if(url.origin!==base.origin||!url.pathname.startsWith('/api/chat/turns/'+encodeURIComponent(turnId)+'/pdf-progress/')||!/^[a-f0-9]{64}$/.test(preview.hash)||url.searchParams.get('hash')!==preview.hash||url.searchParams.get('workspaceId')!==scope||!Number.isInteger(preview.bytes)||preview.bytes<1||preview.bytes>16*1024*1024)throw new Error('Unexpected document preview.')
+ const response=await fetch(url,{headers:await accountHeaders(),signal:AbortSignal.any([signal,AbortSignal.timeout(20000)])})
+ if(!response.ok)throw new Error('The saved field preview could not be opened.')
+ const bytes=await response.arrayBuffer()
+ if(bytes.byteLength!==preview.bytes)throw new Error('The document preview size changed.')
+ const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(b=>b.toString(16).padStart(2,'0')).join('')
+ if(hash!==preview.hash)throw new Error('The document preview failed verification.')
+ return new Uint8Array(bytes)
+}

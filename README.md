@@ -57,7 +57,7 @@ Start Dukkan with one command:
 npm start
 ```
 
-The launcher builds the frontend, starts the local backend on port 8789, and prints the app URL: [http://127.0.0.1:8788/workspace/](http://127.0.0.1:8788/workspace/). The default is a new business workspace. To explore fictional sample data, open [the sample business](http://127.0.0.1:8788/workspace/?example=pearl-delta&view=home). Both servers listen on this computer only. Press Ctrl+C in the terminal to stop them. If either port is already occupied, stop the other local instance before retrying.
+The launcher builds the frontend, starts the local backend on port 8789, and prints the app URL: [http://127.0.0.1:8788/workspace/](http://127.0.0.1:8788/workspace/). The default is a new business workspace. To explore a populated illustrative workspace, open [the sample business](http://127.0.0.1:8788/workspace/?example=kuwait-service&view=home). The sample covers market work, finance, customers, people, operations and document preparation. Its simulated records are labelled and excluded from actual cash-flow totals. Both servers listen on this computer only. Press Ctrl+C in the terminal to stop them. If either port is already occupied, stop the other local instance before retrying.
 
 Opening a downloaded HTML file shows only the static interface. Chat, saved conversations and document operations need the backend. GitHub Pages can host static files, but it cannot run this Node backend or keep an API key private. A deployed website needs a separately configured backend and secure server-side key storage.
 
@@ -86,7 +86,7 @@ npm test --prefix assis-workspace
 npm run build --prefix assis-workspace
 ```
 
-Public checks passed: 69 backend tests, 129 frontend tests, the launcher HTTP test and a production build. They cover providers, record validation, context limits, draft repair, PDF versions, email drafts and frontend behaviour. The full local backend suite passed 166 tests. `npm run test:full --prefix assis-backend` additionally requires the original attributed research snapshot and fixtures. API checks are opt-in. [GitHub Actions template](docs/github-checks.yml) contains the same public checks; copy it to `.github/workflows/checks.yml` when publishing with a login authorised for workflows. Automatic GitHub CI is not enabled by this release.
+Public checks passed: 72 backend tests, 129 frontend tests, the launcher HTTP test and a production build. They cover providers, record validation, context limits, draft repair, PDF versions, email drafts and frontend behaviour. The full local backend suite passed 169 tests. `npm run test:full --prefix assis-backend` additionally requires the original attributed research snapshot and fixtures. API checks are opt-in. [GitHub Actions template](docs/github-checks.yml) contains the same public checks; copy it to `.github/workflows/checks.yml` when publishing with a login authorised for workflows. Automatic GitHub CI is not enabled by this release.
 
 ## Hosting
 

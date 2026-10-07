@@ -10,4 +10,6 @@
 .pdf-playback-error{color:#8e3027;font-size:13px}
 @media(max-width:600px){.pdf-playback-current{grid-template-columns:1fr}.pdf-playback-controls span{margin-inline-start:0}}
 
-.pdf-fill-live .pdf-playback-page{max-height:42vh}.pdf-fill-live .pdf-playback-current{font-size:12px}
+.pdf-fill-live .pdf-playback-page{height:57vh;max-height:57vh}.pdf-fill-live .pdf-playback-current{font-size:12px}
+
+.work-field-updates{margin-block:14px;font-size:13px}.work-field-updates summary{cursor:pointer;color:#52685b}.pdf-playback-controls button[aria-pressed=true]{background:#e1eee4;border-color:#73957f}.pdf-fill-live{padding:12px}.pdf-fill-live .pdf-playback-current{font-size:13px}
