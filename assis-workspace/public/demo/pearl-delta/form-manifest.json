@@ -93,6 +93,60 @@
       "width": 409.44,
       "height": 21.0,
       "fontSize": 9
+    },
+    {
+      "id": "Commercial Code",
+      "fieldName": "Commercial Code",
+      "label": "Commercial Code",
+      "page": 2
+    },
+    {
+      "id": "Executive Management",
+      "fieldName": "Executive Management",
+      "label": "Executive Management",
+      "page": 2
+    },
+    {
+      "id": "Cash",
+      "fieldName": "Cash",
+      "label": "Cash",
+      "page": 3
+    },
+    {
+      "id": "Inkind Contribution",
+      "fieldName": "Inkind Contribution",
+      "label": "Inkind Contribution",
+      "page": 3
+    },
+    {
+      "id": "Total Capital",
+      "fieldName": "Total Capital",
+      "label": "Total Capital",
+      "page": 3
+    },
+    {
+      "id": "Capital Expenditure CAPEX",
+      "fieldName": "Capital Expenditure CAPEX",
+      "label": "Capital Expenditure CAPEX",
+      "page": 4
+    },
+    {
+      "id": "Working Capital",
+      "fieldName": "Working Capital",
+      "label": "Working Capital",
+      "page": 4
+    },
+    {
+      "id": "Total Investment Value",
+      "fieldName": "Total Investment Value",
+      "label": "Total Investment Value",
+      "page": 4
+    },
+    {
+      "id": "Kuwait Branch Manager",
+      "fieldName": "Kuwait Branch Manager",
+      "label": "Kuwait Branch Manager",
+      "page": 4
     }
   ],
   "provenance": "Original KDIPA Application B with actual AcroForm fields filled externally by Codex using fictional example details. Branch investment licensing route eligibility is unconfirmed. Not a issued commercial licence and not submitted.",

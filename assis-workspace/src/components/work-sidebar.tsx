@@ -1,8 +1,8 @@
 import {DocumentDeliveryPreview} from './document-delivery-preview'
 import {DraftFieldPreview} from './live-document'
 import {awaitDocumentRevision,hasMatchingReview} from './document-revision'
-import {useEffect,useRef,useState,type ReactNode} from 'react'
-import {Check,Download,FileText,Files,Maximize2,Minimize2,PanelRight,Save,X,PenLine} from 'lucide-react'
+import {lazy,Suspense,useEffect,useRef,useState,type ReactNode} from 'react'
+import {Check,Download,FileText,Files,Maximize2,Minimize2,PanelRight,Save,X,PenLine,Play} from 'lucide-react'
 import {z} from 'zod'
 import {ArtifactPreview} from './artifact-preview'
 import {artifactPath,chatRequest,turnResponse,turnSchema,chatMessageSchema,verifiedDownload,type ChatArtifact} from '../lib/chat-api'
@@ -13,6 +13,8 @@ import {officialDocumentPrompt} from './business-overview'
 import './work-sidebar.css'
 import {selectedWorkDocumentId,workPanelCloseGuidance} from './work-sidebar-model'
 export type WorkTab='roadmap'|'saved'|'estimates'
+const PdfFillPlayback=lazy(()=>import('./pdf-fill-playback').then(module=>({default:module.PdfFillPlayback})))
+const LivePdfFillPreview=lazy(()=>import('./pdf-fill-playback').then(module=>({default:module.LivePdfFillPreview})))
 // One row per document, its versions inside (latest first, earlier ones marked), each stamped with its creation date.
 export function DraftGroupList({items,language,onOpen,rowClassName='dukkan-saved-artifact'}:{items:ChatArtifact[];language:'en'|'ar';onOpen:(item:ChatArtifact)=>void;rowClassName?:string}){
  const ar=language==='ar'
@@ -73,7 +75,7 @@ export function WorkSidebar({revealRequest,recordDirty,language,scope,active,onS
  },[isOpen,mobile])
  if(!isOpen)return null
  const docTabs=documents.map(item=>({item,id:item.id,title:item.title}))
- const title=selectedDocument?.title||(active==='fill-progress'?(ar?'تجهيز ملف PDF':'Preparing PDF'):(ar?'المستندات':'Documents'))
+ const title=selectedDocument?.title||(active==='fill-progress'?(fillProgress?.status==='completed'?(ar?'ملف PDF جاهز':'PDF ready'):(ar?'تجهيز ملف PDF':'Preparing PDF')):(ar?'المستندات':'Documents'))
  return <>
   {mobile&&<button className="work-panel-backdrop" aria-label={ar?'إغلاق لوحة المستندات':'Close document panel'} tabIndex={-1} onClick={requestClose}/>}
   <aside ref={asideRef} className={'dukkan-work-sidebar is-open '+(selectedDocument?'has-document ':'')+(wide?'is-wide ':'')+(mobile?'is-mobile-dialog':'')} dir={ar?'rtl':'ltr'} aria-label={ar?'لوحة المستند':'Document panel'} aria-modal={mobile||undefined} role={mobile?'dialog':undefined} aria-labelledby="work-panel-title">
@@ -105,6 +107,8 @@ export function WorkSidebar({revealRequest,recordDirty,language,scope,active,onS
 }
 function FillProgressPanel({progress,language,artifact,onOpenArtifact}:{progress:WorkSidebarFillProgress;language:'en'|'ar';artifact:ChatArtifact|undefined;onOpenArtifact?:((artifact:ChatArtifact)=>void)} ){
  const ar=language==='ar'
+ const [watching,setWatching]=useState(false)
+ useEffect(()=>setWatching(false),[progress.turnId,artifact?.id,artifact?.hash])
  const status=progress.status==='queued'?(ar?'في قائمة الانتظار':'Waiting to fill'):
   progress.status==='running'?(ar?'جارٍ تعبئة الحقول':'Filling fields'):
   progress.status==='needs_input'?(ar?'يتطلب استكمال معلومات':'More information is needed'):
@@ -112,8 +116,14 @@ function FillProgressPanel({progress,language,artifact,onOpenArtifact}:{progress
   (ar?'اكتمل تجهيز الحقول':'Field filling completed')
  return <section className="work-fill-progress" aria-label={ar?'تقدم تجهيز المستند':'Document filling progress'}>
   <header><FileText size={18}/><div><h2>{ar?'تجهيز ملف PDF':'PDF preparation'}</h2><p role="status" aria-live="polite">{status}{progress.fields.length?` · ${progress.fields.length} ${ar?'حقول محدّثة':'fields updated'}`:''}</p></div></header>
+  {progress.status==='running'&&<Suspense fallback={<p role="status">{ar?'جارٍ تحميل معاينة المستند…':'Loading the live document preview…'}</p>}><LivePdfFillPreview progress={progress.fields} language={language}/></Suspense>}
   {progress.fields.length>0?<ol>{progress.fields.map((field,index)=><li key={`${field.page??''}-${field.name}-${index}`}><strong>{field.name}</strong>{field.value!==undefined&&<span dir="auto">{field.value|| (ar?'فارغ':'Blank')}</span>}{field.page!==undefined&&<small>{ar?`صفحة ${field.page}`:`Page ${field.page}`}</small>}</li>)}</ol>:<p className="work-fill-empty">{progress.status==='queued'?(ar?'سيظهر التحديث عند تعبئة أول حقل.':'Updates will appear when the first field is filled.'):(ar?'لم يصل تحديث للحقول بعد.':'No field updates have arrived yet.')}</p>}
-  {progress.status==='completed'&&artifact&&onOpenArtifact?<button className="work-primary" onClick={()=>onOpenArtifact(artifact)}><FileText size={15}/>{ar?'افتح ملف PDF المُجهّز':'Open filled PDF'}</button>:progress.status==='completed'&&!artifact?<p className="work-fill-empty">{ar?'اكتمل تجهيز الحقول؛ لم يظهر ملف PDF في القائمة بعد.':'Filling completed; the PDF is not in the document list yet.'}</p>:null}
+  {progress.status==='completed'&&artifact?<>
+   <p className="work-fill-empty">{ar?'يمكنك مشاهدة تشغيل التحديثات المحفوظة بعد اكتمال الملف.':'You can watch a playback of the saved field updates now that the PDF is complete.'}</p>
+   <button className="work-primary" onClick={()=>setWatching(value=>!value)}><Play size={15}/>{watching?(ar?'إخفاء التشغيل':'Hide playback'):(ar?'شاهد تعبئة الحقول':'Watch filling')}</button>
+   {watching&&<Suspense fallback={<p role="status">{ar?'جارٍ تحميل مشغل المستند…':'Loading the document playback…'}</p>}><PdfFillPlayback artifact={artifact} progress={progress.fields} language={language}/></Suspense>}
+   {onOpenArtifact&&<button className="work-primary" onClick={()=>onOpenArtifact(artifact)}><FileText size={15}/>{ar?'افتح ملف PDF المُجهّز':'Open filled PDF'}</button>}
+  </>:progress.status==='completed'&&!artifact?<p className="work-fill-empty">{ar?'اكتمل تجهيز الحقول؛ لم يظهر ملف PDF في القائمة بعد.':'Filling completed; the PDF is not in the document list yet.'}</p>:null}
  </section>
 }
 

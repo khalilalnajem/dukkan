@@ -5,10 +5,10 @@ import {ensure} from '../contracts/index.ts';
 import type {Store} from './store.ts';
 const assets=new URL('../../assis-workspace/public/demo/pearl-delta/',import.meta.url);
 export const pdfDescription='Fill actual KDIPA Application B PDF AcroForm fields for a fictional demonstration. Not eligibility advice or submission. Copy only user-supplied values; do not infer unknowns. For revisions supply expectedHash from the latest official_pdf artifact. Supported template: pearl-delta-official-form. Do not fill signatures or official numbers.';
-export function pdfTemplate(){const manifest=JSON.parse(readFileSync(new URL('form-manifest.json',assets),'utf8'));return {...manifest,fields:[...manifest.fields,...[['Commercial Code',2],['Executive Management',2],['Cash',3],['Inkind Contribution',3],['Total Capital',3],['Capital Expenditure CAPEX',4],['Working Capital',4],['Total Investment Value',4],['Kuwait Branch Manager',4]].map(([fieldName,page])=>({fieldName,label:fieldName,page}))]};}
+export function pdfTemplate(){return JSON.parse(readFileSync(new URL('form-manifest.json',assets),'utf8'));}
 export const pdfSchema={type:'object',properties:{templateId:{type:'string',enum:['pearl-delta-official-form']},fields:{type:'object',properties:Object.fromEntries(pdfTemplate().fields.map((f:any)=>[f.fieldName,{type:'string',description:f.label}])),additionalProperties:false},expectedHash:{type:'string'},recreate:{type:'boolean',description:'Explicitly recreate from supplied fields after case facts change; discard earlier values.'}},required:['templateId','fields'],additionalProperties:false};
 const digest=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
-export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:string,assertCurrent:()=>void,onField:(field:string,value:string,page:number)=>void){
+export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:string,assertCurrent:()=>void,onField:(field:string,value:string,page:number)=>void|Promise<void>){
  const template=pdfTemplate();
  ensure(args.templateId===template.id,'UNKNOWN_TEMPLATE','Choose the supported official PDF template');
  ensure(args.fields&&typeof args.fields==='object'&&!Array.isArray(args.fields)&&Object.keys(args.fields).length>0,'INVALID_PDF_FIELDS','Supply at least one field');
@@ -28,7 +28,7 @@ export async function fillOfficialPdf(store:Store,t:any,args:any,sourceText:stri
  const fields={...(!args.recreate?previous?.fields||{}:{}),...args.fields};
  for(const [key,value] of Object.entries(fields)){
   assertCurrent();form.getTextField(key).setText(String(value));form.getTextField(key).setFontSize(9);
-  if(Object.hasOwn(args.fields,key))onField(key,String(value),allowed.get(key).page);
+  if(Object.hasOwn(args.fields,key))await onField(key,String(value),allowed.get(key).page);
  }
  form.updateFieldAppearances(font);
  for(const page of pdf.getPages())page.drawText('DEMONSTRATION - FICTIONAL COMPANY - NOT SUBMITTED',{x:28,y:10,size:8,font,color:rgb(.55,.1,.1)});

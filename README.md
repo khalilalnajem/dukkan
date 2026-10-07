@@ -15,11 +15,11 @@ Dukkan keeps the founder’s context and evidence together. Its agent proposes c
 | Kuwait market and official-source retrieval | Implemented; captured research snapshot is **not distributed** in this repository |
 | KWD costs, scenarios, records, finance CSV review and charts | Implemented; estimates/simulations remain distinct from recorded actuals |
 | Sales, people and operations | Typed records, reviewable agent proposals, revisions and archive/restore |
-| Official PDF preparation | KDIPA Application B download, supported AcroForm filling, revisions and human review; no filing or signatures |
+| Official PDF preparation | KDIPA Application B live field preview, download, supported AcroForm filling, revisions and human review; no filing or signatures |
 | Conversations, documents and attachments | Local SQLite persistence; no new hosted multi-user service claim |
 | Email | Draft/review adapter and reviewed-document delivery preview; a sending account is not connected in this release |
 | English and Arabic interface | Implemented; complete linguistic/accessibility audit remains open |
-| Marketplace, investors, marketing and integrations | [Phase 2](docs/PHASE-2.md), separately planned |
+| Marketplace, investors, marketing and integrations | [Phase 2](docs/PHASE-2.md), separately planned with 13 interactive design previews |
 
 This is a working local prototype. Prepared records do not establish completed commercial actions or legal eligibility. Example businesses and their operating data are fictional.
 
@@ -43,7 +43,7 @@ This installs the backend and frontend dependencies, then downloads the official
 cp assis-backend/.env.example assis-backend/.env.local
 ```
 
-The example uses `gpt-4.1-mini`; `gpt-4o-mini` is also supported. Keep `.env.local` private. The launcher checks only whether the required key is present and never prints it. You can use OpenRouter instead by setting `DIKAN_PROVIDER=openrouter` and filling in its key and model settings. Direct OpenAI access avoids the extra OpenRouter account and funding step; model token pricing is unchanged. Set `DIKAN_PROVIDER=none` to use records and documents without AI.
+The example uses `gpt-4.1-mini`; `gpt-4o-mini` is also supported. Keep `.env.local` private. Set `OPENAI_MAX_DAILY_USD=0.50` to enforce a conservative daily reservation cap before OpenAI chat requests are sent. Failed or ambiguous requests retain their reservation; this cap does not cover separate speech API calls. The launcher checks only whether the required key is present and never prints it. You can use OpenRouter instead by setting `DIKAN_PROVIDER=openrouter` and filling in its key and model settings. Direct OpenAI access avoids the extra OpenRouter account and funding step; model token pricing is unchanged. Set `DIKAN_PROVIDER=none` to use records and documents without AI.
 
 Check the local configuration without starting servers or contacting a model:
 
@@ -76,7 +76,7 @@ npm run verify:release
 
 This opt-in test uses a fresh fictional store, caps inference at twelve requests, asks the real API for a simulated quote and a supported PDF, checks revisions/review and restarts the store to verify persistence. It does not read user businesses or submit anything. API usage is billable within the configured caps. A failure is reported as a failure, with no scripted success fallback.
 
-The direct OpenAI demonstration passed on 7 October 2026 with four model requests at an estimated USD 0.0044108. That figure is calculated from reported token use, not an account billing statement. The broader verified walkthrough and precise evidence boundaries are in [DEMO.md](docs/DEMO.md). Screenshots show the actual app with fictional data, not a hosted service or a live government transaction.
+The direct OpenAI demonstration passed on 7 October 2026 with four model requests at an estimated USD 0.0044108. That figure is calculated from reported token use, not an account billing statement. A separate fixed ten-query evaluation on the authorised local corpus scored 9/10 for answer correctness and 4/10 for complete exact-passage citation support. This small set does not establish production reliability. The broader verified walkthrough and precise evidence boundaries are in [DEMO.md](docs/DEMO.md). Screenshots show the actual app with fictional data, not a hosted service or a live government transaction.
 
 ## Project checks
 
@@ -86,7 +86,7 @@ npm test --prefix assis-workspace
 npm run build --prefix assis-workspace
 ```
 
-Public checks passed: 65 backend tests, 125 frontend tests, the launcher HTTP test and a production build. They cover providers, record validation, context limits, draft repair, PDF versions, email drafts and frontend behaviour. The full local backend suite passed 162 tests. `npm run test:full --prefix assis-backend` additionally requires the original attributed research snapshot and fixtures. API checks are opt-in. [GitHub Actions template](docs/github-checks.yml) contains the same public checks; copy it to `.github/workflows/checks.yml` when publishing with a login authorised for workflows. Automatic GitHub CI is not enabled by this release.
+Public checks passed: 69 backend tests, 129 frontend tests, the launcher HTTP test and a production build. They cover providers, record validation, context limits, draft repair, PDF versions, email drafts and frontend behaviour. The full local backend suite passed 166 tests. `npm run test:full --prefix assis-backend` additionally requires the original attributed research snapshot and fixtures. API checks are opt-in. [GitHub Actions template](docs/github-checks.yml) contains the same public checks; copy it to `.github/workflows/checks.yml` when publishing with a login authorised for workflows. Automatic GitHub CI is not enabled by this release.
 
 ## Hosting
 

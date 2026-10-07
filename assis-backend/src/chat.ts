@@ -72,7 +72,7 @@ export class ChatController {
   if(name==='prepare_email'){const email=new EmailService(this.store).create(t.conversationId,args);this.event(t,'email_draft_saved',name,'Email draft saved for review',{emailId:email.id,hash:email.hash});return {emailId:email.id,status:'draft',hash:email.hash,email};}
   if(name==='fill_official_pdf'){
    const sourceText=this.store.ordered('chat_message',c.businessId).filter(m=>m.conversationId===t.conversationId&&m.role==='user').map(m=>m.content).join('\n');
-   const artifact=await fillOfficialPdf(this.store,t,args,sourceText,()=>this.current(t,signal),(field,value,page)=>this.event(t,'pdf_field_updated',name,'Filled '+field,{result:{field,value,page}}));
+   const artifact=await fillOfficialPdf(this.store,t,args,sourceText,()=>this.current(t,signal),async(field,value,page)=>{this.event(t,'pdf_field_updated',name,'Filled '+field,{result:{field,value,page}});const interval=Math.min(2000,Math.max(0,Number(process.env.DIKAN_PDF_PROGRESS_INTERVAL_MS)||0));if(interval)await new Promise(resolve=>setTimeout(resolve,interval));this.current(t,signal);});
    this.event(t,'artifact_saved',name,'Official PDF draft saved',{artifactId:artifact.id,hash:artifact.hash,version:artifact.version});
    actions.push({type:'review_artifact',label:'Review filled PDF',endpoint:artifact.reviewUrl,payload:{hash:artifact.hash,acknowledgeDraft:true}});
    return {artifact:this.publicArtifact(artifact),approved:false,sent:false};

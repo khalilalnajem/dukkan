@@ -27,10 +27,12 @@ export function openaiConfig(env:NodeJS.ProcessEnv=process.env){
  ensure(Object.hasOwn(PRICES,model),'PROVIDER_MODEL','Choose gpt-4.1-mini or gpt-4o-mini',503);
  const maxInputUsdPerM=cappedNumber(env,'OPENAI_MAX_INPUT_USD_PER_M',0.40,0.40);
  const maxOutputUsdPerM=cappedNumber(env,'OPENAI_MAX_OUTPUT_USD_PER_M',1.60,1.60);
+ const maxDailyUsd=env.OPENAI_MAX_DAILY_USD===undefined?undefined:Number(env.OPENAI_MAX_DAILY_USD);
+ ensure(maxDailyUsd===undefined||(Number.isFinite(maxDailyUsd)&&maxDailyUsd>0&&maxDailyUsd<=20),'PROVIDER_LIMIT','Invalid OPENAI_MAX_DAILY_USD');
  return {base:BASE,key:env.OPENAI_API_KEY.trim(),model,maxInputUsdPerM,maxOutputUsdPerM,
   maxOutput:limit(env,'DIKAN_MAX_OUTPUT_TOKENS',4096,4096),
   maxInput:limit(env,'DIKAN_MAX_INPUT_BYTES',60000,200000),
-  daily:limit(env,'DIKAN_MAX_REQUESTS_PER_DAY',100,1000)};
+  daily:limit(env,'DIKAN_MAX_REQUESTS_PER_DAY',100,1000),maxDailyUsd};
 }
 
 function safeTokenCount(value:unknown):number|null{
@@ -49,7 +51,7 @@ function errorGuidance(status:number,code:unknown){
 }
 
 export function createOpenAIModel(config:ReturnType<typeof openaiConfig>,options:{fetch?:typeof fetch;store?:Store}={}):ChatModel{
- let day='',count=0;
+ let day='',count=0,reservedUsd=0;
  const modelList=()=>Object.keys(PRICES).map(id=>({id,freeVerified:permitted(id,config)}));
  return {name:'openai',version:config.model,canSelect(id){return permitted(id,config)},async catalogue(){return {models:modelList(),checkedAt:new Date().toISOString()}},async respond({messages,tools,signal,modelId,forcedTool}){
   const selected=modelId||config.model;
@@ -58,10 +60,15 @@ export function createOpenAIModel(config:ReturnType<typeof openaiConfig>,options
   const body=JSON.stringify({model:selected,messages:wireMessages(messages),...(tools.length?{tools}:{}),...(forcedTool?{tool_choice:{type:'function',function:{name:forcedTool}}}:{}),stream:false,max_tokens:config.maxOutput});
   ensure(Buffer.byteLength(body)<=config.maxInput,'CONTEXT_LIMIT','Saved context exceeds the configured request limit. No request was sent.',413);
   return serialInference(signal,async()=>{
-   const today=new Date().toISOString().slice(0,10);if(day!==today){day=today;count=0;}
+   const today=new Date().toISOString().slice(0,10);if(day!==today){day=today;count=0;reservedUsd=0;}
    const budgetKey='openai-'+today;const record=options.store?.get('provider_budget',budgetKey);const used=record?.requests??count;
    ensure(used<config.daily,'DAILY_BUDGET','Daily OpenAI request limit reached. No retry or fallback was run.',429);
-   count=used+1;options.store?.put('provider_budget',budgetKey,'provider',{requests:count});
+   const price=PRICES[selected];
+   const worstCaseUsd=(Buffer.byteLength(body)*price.input+config.maxOutput*price.output)/1_000_000;
+   const usedUsd=record?.reservedUsd??reservedUsd;
+   ensure(config.maxDailyUsd===undefined||usedUsd+worstCaseUsd<=config.maxDailyUsd+Number.EPSILON,'DAILY_COST_BUDGET','Daily OpenAI cost reservation limit reached. No request was sent.',429);
+   count=used+1;reservedUsd=usedUsd+worstCaseUsd;
+   options.store?.put('provider_budget',budgetKey,'provider',{...record,requests:count,reservedUsd});
    let response:Response;
    try{response=await (options.fetch||fetch)(BASE+'/chat/completions',{method:'POST',redirect:'error',headers:{'Content-Type':'application/json',Authorization:'Bearer '+config.key},body,signal:AbortSignal.any([signal,AbortSignal.timeout(90000)])});}
    catch{signal.throwIfAborted();throw new ApiError(503,'PROVIDER_UNAVAILABLE','OpenAI request failed or timed out. No retry or fallback was run.');}
@@ -84,7 +91,7 @@ export function createOpenAIModel(config:ReturnType<typeof openaiConfig>,options
    const usage=result.usage||{};const promptTokens=safeTokenCount(usage.prompt_tokens);const outputTokens=safeTokenCount(usage.completion_tokens);
    ensure(outputTokens===null||outputTokens<=config.maxOutput,'MODEL_OUTPUT_LIMIT','OpenAI response exceeded the configured output token limit',502);
    const cachedPromptTokens=Math.min(promptTokens??0,safeTokenCount(usage.prompt_tokens_details?.cached_tokens)??0);
-   const price=PRICES[selected];const costUsd=promptTokens===null||outputTokens===null?null:((promptTokens-cachedPromptTokens)*price.input+cachedPromptTokens*price.cachedInput+outputTokens*price.output)/1_000_000;
+   const costUsd=promptTokens===null||outputTokens===null?null:((promptTokens-cachedPromptTokens)*price.input+cachedPromptTokens*price.cachedInput+outputTokens*price.output)/1_000_000;
    ensure(!JSON.stringify({content,calls}).includes(config.key),'PROVIDER_SECRET','Provider response rejected',502);
    return {content,calls,usage:{provider:'openai',model:typeof result.model==='string'?result.model:selected,requestedModel:selected,promptTokens,outputTokens,totalTokens:safeTokenCount(usage.total_tokens),cachedPromptTokens,costUsd,costEstimated:costUsd!==null,inputUsdPerMillion:price.input,cachedInputUsdPerMillion:price.cachedInput,outputUsdPerMillion:price.output,at:new Date().toISOString(),responseHash:hash({content,calls})}};
   });

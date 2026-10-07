@@ -95,7 +95,7 @@ export function explicitStageRequest(text:string){
  const clauses=text.split(/[.!?\n؛؟]/).map(s=>s.trim());
  for(const clause of clauses){
   if(/\b(?:do not|don't|dont|not yet|without|no need)\b|لا ت|لا أريد/.test(clause.toLowerCase()))continue;
-  const match=clause.match(/^(?:please\s+)?(?:save|prepare|create|write|draft)\s+(?:me\s+)?(?:an?\s+|the\s+)?(idea|ideation|validation|planning|plan)(?:[- ]stage)?\s+(?:draft|review|plan)\b/i);
+  const match=clause.match(/^(?:please\s+)?(?:save|prepare|create|write|draft|revise|update|correct)\s+(?:me\s+)?(?:an?\s+|the\s+|this\s+)?(idea|ideation|validation|planning|plan)(?:[- ]stage)?\s+(?:draft|review|plan)\b/i);
   if(match)return {type:'stage_draft' as const,stage:({idea:'idea',ideation:'idea',validation:'validate',planning:'plan',plan:'plan'} as const)[match[1].toLowerCase() as 'idea']};
   const ar=clause.match(/^(?:احفظ|جهز|أعد|اكتب)\s+مسودة\s+(الفكرة|التحقق|التخطيط)/);
   if(ar)return {type:'stage_draft' as const,stage:ar[1]==='الفكرة'?'idea':ar[1]==='التحقق'?'validate':'plan'};

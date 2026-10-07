@@ -55,6 +55,28 @@ test('input byte cap prevents fetch and daily budget prevents excess requests',a
  await assert.rejects(successful.respond({messages:[{role:'user',content:'Again'}],tools:[],signal:signal()}),{code:'DAILY_BUDGET'});assert.equal(calls,1);
 });
 
+test('daily USD cap validates positive values no greater than twenty',()=>{
+ assert.equal(config({OPENAI_MAX_DAILY_USD:'0.50'}).maxDailyUsd,0.5);
+ for(const value of ['0','-0.1','20.01','NaN','Infinity'])assert.throws(()=>config({OPENAI_MAX_DAILY_USD:value}),{code:'PROVIDER_LIMIT'});
+ assert.equal(config().maxDailyUsd,undefined);
+});
+
+test('daily USD reservation blocks before fetch and persists monotonically with request count',async()=>{
+ let calls=0;const store=memoryStore();const model=createOpenAIModel(config({OPENAI_MAX_DAILY_USD:'0.0001',DIKAN_MAX_OUTPUT_TOKENS:'10'}),{store:store as any,fetch:(async()=>{calls++;return response({content:'ok'});}) as any});
+ await model.respond({messages:[{role:'user',content:'x'}],tools:[],signal:signal()});
+ const first=[...store.rows.values()][0];assert.equal(first.requests,1);assert.ok(first.reservedUsd>0);
+ await assert.rejects(model.respond({messages:[{role:'user',content:'x'}],tools:[],signal:signal()}),{code:'DAILY_COST_BUDGET'});
+ assert.equal(calls,1);assert.equal([...store.rows.values()][0].reservedUsd,first.reservedUsd);
+});
+
+test('ambiguous fetch failure retains the USD reservation and prevents a second request over cap',async()=>{
+ let calls=0;const store=memoryStore();const model=createOpenAIModel(config({OPENAI_MAX_DAILY_USD:'0.0001',DIKAN_MAX_OUTPUT_TOKENS:'10'}),{store:store as any,fetch:(async()=>{calls++;throw Error('ambiguous network failure');}) as any});
+ await assert.rejects(model.respond({messages:[{role:'user',content:'x'}],tools:[],signal:signal()}),{code:'PROVIDER_UNAVAILABLE'});
+ const first=[...store.rows.values()][0];assert.equal(first.requests,1);assert.ok(first.reservedUsd>0);
+ await assert.rejects(model.respond({messages:[{role:'user',content:'x'}],tools:[],signal:signal()}),{code:'DAILY_COST_BUDGET'});
+ assert.equal(calls,1);assert.equal([...store.rows.values()][0].reservedUsd,first.reservedUsd);
+});
+
 test('aborted requests are not retried or converted to provider success',async()=>{
  const controller=new AbortController();let calls=0;let started!:()=>void;const began=new Promise<void>(resolve=>{started=resolve;});const model=createOpenAIModel(config(),{fetch:((_url:any,init:any)=>{calls++;started();return new Promise((_resolve,reject)=>init.signal.addEventListener('abort',()=>reject(init.signal.reason),{once:true}));}) as any});
  const pending=model.respond({messages:[{role:'user',content:'Cancel me'}],tools:[],signal:controller.signal});await began;controller.abort();await assert.rejects(pending);assert.equal(calls,1);
